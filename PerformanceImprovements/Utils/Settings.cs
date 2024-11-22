@@ -8,17 +8,14 @@ public static class Settings
 {
     private static readonly List<ConfigEntryBase> ConfigEntries = [];
     
-    #nullable disable
     public static ConfigEntry<KeyboardShortcut> DumpAnalytics;
-    
-    #nullable enable
     
     public static void Bind(ConfigFile config)
     {
         ConfigEntries.Add(DumpAnalytics = config.Bind(
             "Analytics",
             "Dump Analytics",
-            new KeyboardShortcut(KeyCode.A),
+            new KeyboardShortcut(KeyCode.F10),
             new ConfigDescription(
                 "Dump the analytics json to disk",
                 null,

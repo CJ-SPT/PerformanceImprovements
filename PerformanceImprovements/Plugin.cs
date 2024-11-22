@@ -37,4 +37,12 @@ public class Plugin : BaseUnityPlugin
         new BotsGroupMethod12().Enable();
         new BotsGroupMethod16().Enable();
     }
+
+    internal void Update()
+    {
+        if (Settings.DumpAnalytics.Value.IsDown() && _eftProfiler is not null)
+        {
+            _eftProfiler.DumpAnalytics();
+        }
+    }
 }
