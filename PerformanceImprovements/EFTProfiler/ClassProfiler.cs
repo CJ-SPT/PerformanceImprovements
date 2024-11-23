@@ -14,7 +14,7 @@ public class ClassProfiler(Type targetType)
     private readonly Harmony _harmony = new($"{targetType.Name} Profiler");
     
     // { method, model } }
-    protected static readonly Dictionary<MethodBase, AnalyticsModel> AnalyticsModels = []; 
+    private static readonly Dictionary<MethodBase, AnalyticsModel> AnalyticsModels = []; 
     
     private static string _path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
     
@@ -33,7 +33,7 @@ public class ClassProfiler(Type targetType)
         var json = AnalyticsModels
             .OrderByDescending(t => t.Value.MaxTime)
             .ThenByDescending(t => t.Value.AvgTime)
-            .ToJson();;
+            .ToJson();
         
         File.WriteAllText(Path.Combine(_path, "timings.json"), json);
         

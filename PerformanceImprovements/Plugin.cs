@@ -15,8 +15,8 @@ public class Plugin : BaseUnityPlugin
 {
     public const int TarkovVersion = 33420;
 
-    internal static ManualLogSource? Log;
-    private ClassProfiler? _eftProfiler;
+    [CanBeNull] internal static ManualLogSource Log;
+    [CanBeNull] private ClassProfiler _eftProfiler;
     
     internal void Awake()
     {
