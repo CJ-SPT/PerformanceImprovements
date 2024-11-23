@@ -35,7 +35,7 @@ public class ClassProfiler(Type targetType)
             .ThenByDescending(t => t.Value.AvgTime)
             .ToJson();
         
-        File.WriteAllText(Path.Combine(_path, "timings.json"), json);
+        File.WriteAllText(Path.Combine(_path, $"{targetType.Name}_timings.json"), json);
         
         Plugin.Log!.LogWarning("Analytics dumped to disk...");
     }
