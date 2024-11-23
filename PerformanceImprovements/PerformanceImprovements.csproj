@@ -4,7 +4,7 @@
     <TargetFramework>net472</TargetFramework>
 	  <Description>EFT performance improvements</Description>
 	  <Version>1.0.0</Version>
-	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	  <Nullable>enable</Nullable>
 	  <LangVersion>latest</LangVersion>
 	  <PackageId>PerformanceImprovements</PackageId>
 	  <RootNamespace>PerformanceImprovements</RootNamespace>
@@ -76,6 +76,21 @@
 		</Reference>
 		<Reference Include="UnityEngine.AnimationModule">
 			<HintPath>..\..\..\EscapeFromTarkov_Data\managed\UnityEngine.AnimationModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UniTask">
+			<HintPath>$(SolutionDir)UnityToolkit\UniTask.dll</HintPath>
+		</Reference>
+		<Reference Include="UniTask.DOTween">
+			<HintPath>$(SolutionDir)UnityToolkit\UniTask.DOTween.dll</HintPath>
+		</Reference>
+		<Reference Include="UniTask.DOTween">
+			<HintPath>$(SolutionDir)UnityToolkit\UniTask.Linq.dll</HintPath>
+		</Reference>
+		<Reference Include="UniTask.TextMeshPro">
+			<HintPath>$(SolutionDir)UnityToolkit\UniTask.TextMeshPro.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.Collections">
+			<HintPath>$(SolutionDir)UnityToolkit\Unity.Collections.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 	

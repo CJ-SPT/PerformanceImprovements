@@ -2,6 +2,7 @@
 using DrakiaXYZ.VersionChecker;
 using System;
 using BepInEx.Logging;
+using JetBrains.Annotations;
 using PerformanceImprovements.EFTProfiler;
 using PerformanceImprovements.Patches;
 using PerformanceImprovements.Utils;
@@ -9,12 +10,12 @@ using PerformanceImprovements.Utils;
 namespace PerformanceImprovements;
 
 [BepInPlugin("com.dirtbikercj.performanceImprovements", "Performance Improvements", "1.0.0")]
+[BepInDependency("com.Arys.UnityToolkit")]
 public class Plugin : BaseUnityPlugin
 {
     public const int TarkovVersion = 33420;
 
     internal static ManualLogSource? Log;
-
     private ClassProfiler? _eftProfiler;
     
     internal void Awake()
@@ -36,6 +37,9 @@ public class Plugin : BaseUnityPlugin
         new BotsGroupMethod9().Enable();
         new BotsGroupMethod12().Enable();
         new BotsGroupMethod16().Enable();
+        
+        // DeadBodiesController
+        new DeadBodiesControllerAddBody().Enable();
     }
 
     internal void Update()
