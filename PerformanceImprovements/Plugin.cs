@@ -2,6 +2,7 @@
 using DrakiaXYZ.VersionChecker;
 using System;
 using BepInEx.Logging;
+using EFT;
 using JetBrains.Annotations;
 using PerformanceImprovements.EFTProfiler;
 using PerformanceImprovements.Patches;
@@ -28,17 +29,14 @@ public class Plugin : BaseUnityPlugin
         Log = Logger;
         Settings.Bind(Config);
         
-        _eftProfiler = new ClassProfiler(typeof(BotsGroup));
+        _eftProfiler = new ClassProfiler(typeof(GClass888));
         _eftProfiler.Enable();
         
         DontDestroyOnLoad(this);
         
-        // BotsGroup
-        new BotsGroupMethod9().Enable();
-        new BotsGroupMethod12().Enable();
-        new BotsGroupMethod16().Enable();
+        // TODO: This breaks aggression
+        //new BotsGroupAddMember().Enable();
         
-        // DeadBodiesController
         new DeadBodiesControllerAddBody().Enable();
     }
 
