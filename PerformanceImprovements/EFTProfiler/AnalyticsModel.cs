@@ -6,6 +6,7 @@ namespace PerformanceImprovements.EFTProfiler;
 
 public class AnalyticsModel
 {
+    public bool IsMainThread;
     public long MinTime;
     public long MaxTime;
     public long AvgTime;

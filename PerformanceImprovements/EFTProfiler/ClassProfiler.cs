@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using HarmonyLib;
 using PerformanceImprovements.Utils;
 
@@ -65,18 +66,20 @@ public class ClassProfiler(Type targetType)
         }
     }
 
-    private static void AddEntry(MethodBase method, long elapsed)
+    private static void AddEntry(MethodBase method, long elapsed, bool isMainThread)
     {
         if (!AnalyticsModels.TryGetValue(method, out var model))
         {
             model = new AnalyticsModel();
             model.AllTimings.Add(elapsed);
+            model.IsMainThread = isMainThread;
             
             AnalyticsModels.Add(method, model);
             return;
         }
         
         AnalyticsModels[method].AllTimings.Add(elapsed);
+        AnalyticsModels[method].IsMainThread = isMainThread;
     }
     
     private class ProfilerPatch()
@@ -99,7 +102,7 @@ public class ClassProfiler(Type targetType)
             
             __state.Stop();
 
-            AddEntry(__originalMethod, __state.ElapsedMilliseconds);
+            AddEntry(__originalMethod, __state.ElapsedMilliseconds, !Thread.CurrentThread.IsBackground);
             
             if (__state.ElapsedMilliseconds == 0) return;
 
