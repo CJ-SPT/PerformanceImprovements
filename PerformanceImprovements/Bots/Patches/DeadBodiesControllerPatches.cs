@@ -6,9 +6,9 @@ using HarmonyLib;
 using SPT.Reflection.Patching;
 using UnityEngine.AI;
 
-namespace PerformanceImprovements.Patches;
+namespace PerformanceImprovements.Bots.Patches;
 
-public class DeadBodiesControllerAddBody : ModulePatch
+public class DeadBodiesControllerAddBodyPatch : ModulePatch
 {
     private static readonly FieldInfo GroupsField = AccessTools.Field(typeof(DeadBodiesController), "_groups");
     private static readonly float DistNotToGroupSqr = GClass583.Core.DIST_NOT_TO_GROUP_SQR;
@@ -48,8 +48,6 @@ public class DeadBodiesControllerAddBody : ModulePatch
         if (groupList.Count == 0) return UniTask.CompletedTask;
 
         BotsGroup botsGroup = null;
-        
-        // TODO: Fix this dumb retarded shit, like why.
         
         foreach (var botGroup in groupList)
         {

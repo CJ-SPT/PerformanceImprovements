@@ -6,7 +6,7 @@ using EFT;
 using HarmonyLib;
 using SPT.Reflection.Patching;
 
-namespace PerformanceImprovements.Patches;
+namespace PerformanceImprovements.Bots.Patches;
 
 public class BotsGroupAddMember : ModulePatch
 {

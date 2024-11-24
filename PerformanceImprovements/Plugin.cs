@@ -2,10 +2,8 @@
 using DrakiaXYZ.VersionChecker;
 using System;
 using BepInEx.Logging;
-using EFT;
 using JetBrains.Annotations;
 using PerformanceImprovements.EFTProfiler;
-using PerformanceImprovements.Patches;
 using PerformanceImprovements.Utils;
 
 namespace PerformanceImprovements;
@@ -34,10 +32,7 @@ public class Plugin : BaseUnityPlugin
         
         DontDestroyOnLoad(this);
         
-        // TODO: This breaks aggression
-        //new BotsGroupAddMember().Enable();
-        
-        new DeadBodiesControllerAddBody().Enable();
+        PatchManager.EnablePatches();
     }
 
     internal void Update()
