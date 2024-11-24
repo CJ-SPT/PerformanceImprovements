@@ -2,6 +2,7 @@
 using DrakiaXYZ.VersionChecker;
 using System;
 using BepInEx.Logging;
+using EFT;
 using JetBrains.Annotations;
 using PerformanceImprovements.EFTProfiler;
 using PerformanceImprovements.Utils;
@@ -28,7 +29,7 @@ public class Plugin : BaseUnityPlugin
         Settings.Bind(Config);
         PatchManager.EnablePatches();
         
-        _eftProfiler = new ClassProfiler(typeof(GClass888));
+        _eftProfiler = new ClassProfiler(typeof(BotMover));
         _eftProfiler.Enable();
         
         DontDestroyOnLoad(this);

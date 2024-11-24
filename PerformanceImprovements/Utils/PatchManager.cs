@@ -37,6 +37,12 @@ public static class PatchManager
     private static IEnumerable<Type> GetAllPatches()
     {
         return Assembly.GetExecutingAssembly().GetTypes()
-            .Where(t => t.BaseType == typeof(ModulePatch));
+            .Where(t => t.BaseType == typeof(ModulePatch) && 
+                        t.GetCustomAttribute(typeof(DisablePatchAttribute)) == null);
     }
+}
+
+public class DisablePatchAttribute : Attribute
+{
+    
 }

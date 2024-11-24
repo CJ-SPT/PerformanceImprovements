@@ -39,6 +39,8 @@ public class ActivateBotPatch : ModulePatch
         Func<GameWorld, Profile, Vector3, Task<LocalPlayer>> ___func_0,
         IBotGame ___ibotGame_0)
     {
+        return true;
+        
         var action = new GClass888.Class564()
         {
             data = data,
@@ -51,8 +53,8 @@ public class ActivateBotPatch : ModulePatch
         BotOwnersToActivate.Clear();
         _isSpawning = true;
         
-        //UniTask.RunOnThreadPool(() => TrySpawnBots(data, shallBeGroup, cancellationToken, ___func_0, ___ibotGame_0));
-        //UniTask.WaitUntil(() => !_isSpawning);
+        UniTask.RunOnThreadPool(() => TrySpawnBots(data, shallBeGroup, cancellationToken, ___func_0, ___ibotGame_0));
+        UniTask.WaitUntil(() => !_isSpawning);
 
         TrySpawnBots(data, shallBeGroup, cancellationToken, ___func_0, ___ibotGame_0);
         

@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using Cysharp.Threading.Tasks;
 using EFT;
 using HarmonyLib;
+using PerformanceImprovements.Utils;
 using SPT.Reflection.Patching;
 
 namespace PerformanceImprovements.Bots.Patches;
 
+[DisablePatch]
 public class BotsGroupAddMember : ModulePatch
-{
-    private static readonly Func<BotOwner, float> AggressionCoef = BotsGroup.Class266.class266_0.method_6;
-    
+{ 
     protected override MethodBase GetTargetMethod()
     {
         return AccessTools.Method(typeof(BotsGroup), nameof(BotsGroup.AddMember));
