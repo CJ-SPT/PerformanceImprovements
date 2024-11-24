@@ -26,13 +26,12 @@ public class Plugin : BaseUnityPlugin
 
         Log = Logger;
         Settings.Bind(Config);
+        PatchManager.EnablePatches();
         
         _eftProfiler = new ClassProfiler(typeof(GClass888));
         _eftProfiler.Enable();
         
         DontDestroyOnLoad(this);
-        
-        PatchManager.EnablePatches();
     }
 
     internal void Update()
