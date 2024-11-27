@@ -1,15 +1,18 @@
 ﻿using BepInEx;
 using DrakiaXYZ.VersionChecker;
 using System;
+using System.Linq;
+using System.Reflection;
 using BepInEx.Logging;
 using EFT;
 using JetBrains.Annotations;
 using PerformanceImprovements.EFTProfiler;
 using PerformanceImprovements.Utils;
+using UnityEngine;
 
 namespace PerformanceImprovements;
 
-[BepInPlugin("com.dirtbikercj.performanceImprovements", "Performance Improvements", "1.0.0")]
+[BepInPlugin("com.dirtbikercj.performanceImprovements", "Performance Improvements", "0.1.0")]
 [BepInDependency("com.Arys.UnityToolkit")]
 public class Plugin : BaseUnityPlugin
 {
@@ -29,8 +32,8 @@ public class Plugin : BaseUnityPlugin
         Settings.Bind(Config);
         PatchManager.EnablePatches();
         
-        _eftProfiler = new ClassProfiler(typeof(BotMover));
-        _eftProfiler.Enable();
+        //_eftProfiler = new ClassProfiler(typeof(GClass470));
+        //_eftProfiler.Enable();
         
         DontDestroyOnLoad(this);
     }
@@ -39,7 +42,7 @@ public class Plugin : BaseUnityPlugin
     {
         if (Settings.DumpAnalytics.Value.IsDown() && _eftProfiler is not null)
         {
-            _eftProfiler.DumpAnalytics();
+            //_eftProfiler.DumpAnalytics();
         }
     }
 }

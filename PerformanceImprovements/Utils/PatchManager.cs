@@ -42,7 +42,6 @@ public static class PatchManager
     }
 }
 
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class DisablePatchAttribute : Attribute
-{
-    
-}
+{ }

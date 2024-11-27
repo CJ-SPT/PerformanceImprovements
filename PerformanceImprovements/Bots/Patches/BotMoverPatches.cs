@@ -1,10 +1,12 @@
 ﻿using System.Reflection;
 using HarmonyLib;
+using PerformanceImprovements.Utils;
 using SPT.Reflection.Patching;
 using UnityEngine;
 
 namespace PerformanceImprovements.Bots.Patches;
 
+[DisablePatch]
 public class GoToPointPatch : ModulePatch
 {
     protected override MethodBase GetTargetMethod()
