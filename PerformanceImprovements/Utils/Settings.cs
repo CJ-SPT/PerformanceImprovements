@@ -7,22 +7,12 @@ namespace PerformanceImprovements.Utils;
 public static class Settings
 {
     private static readonly List<ConfigEntryBase> ConfigEntries = [];
-
-    public static ConfigEntry<bool> EnableProfiler;
+    
     public static ConfigEntry<KeyboardShortcut> DumpAnalytics;
     
     
     public static void Bind(ConfigFile config)
     {
-        ConfigEntries.Add(EnableProfiler = config.Bind(
-            "Profiler",
-            "Enable Profiler",
-            false,
-            new ConfigDescription(
-                "Enable the profiler.",
-                null,
-                new ConfigurationManagerAttributes { IsAdvanced = true })));
-        
         ConfigEntries.Add(DumpAnalytics = config.Bind(
             "Profiler",
             "Dump Analytics",

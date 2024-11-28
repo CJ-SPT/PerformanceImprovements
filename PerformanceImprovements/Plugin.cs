@@ -19,7 +19,7 @@ public class Plugin : BaseUnityPlugin
     public const int TarkovVersion = 33420;
 
     [CanBeNull] internal static ManualLogSource Log;
-    [CanBeNull] private ClassProfiler _eftProfiler;
+    [CanBeNull] internal static ClassProfiler Profiler;
     
     internal void Awake()
     {
@@ -31,18 +31,20 @@ public class Plugin : BaseUnityPlugin
         Log = Logger;
         Settings.Bind(Config);
         PatchManager.EnablePatches();
-        
-        //_eftProfiler = new ClassProfiler(typeof(GClass470));
-        //_eftProfiler.Enable();
+
+#if DEBUG
+        Profiler = new ClassProfiler();
+        ConsoleCommands.RegisterCommands();
+#endif
         
         DontDestroyOnLoad(this);
     }
 
     internal void Update()
     {
-        if (Settings.DumpAnalytics.Value.IsDown() && _eftProfiler is not null)
+        if (Profiler is not null && Settings.DumpAnalytics.Value.IsDown())
         {
-            //_eftProfiler.DumpAnalytics();
+            Profiler.DumpAnalytics();
         }
     }
 }

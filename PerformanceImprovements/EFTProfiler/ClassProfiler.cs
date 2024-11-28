@@ -5,22 +5,65 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using EFT.UI;
 using HarmonyLib;
+using JetBrains.Annotations;
 using PerformanceImprovements.Utils;
 
 namespace PerformanceImprovements.EFTProfiler;
 
-public class ClassProfiler(Type targetType)
+public class ClassProfiler()
 {
-    private readonly Harmony _harmony = new($"{targetType.Name} Profiler");
-    
-    // { method, model } }
+    private readonly Harmony _harmony = new("Profiler");
     private static readonly Dictionary<MethodBase, AnalyticsModel> AnalyticsModels = []; 
+    private static readonly string AssemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+    [CanBeNull] private Type _currentTypeProfiling;
+    private static bool _isEnabled;
     
-    private static string _path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-    
-    public void Enable()
+    public void TryEnableOrDisable(bool enabled)
     {
+        if (_currentTypeProfiling is null)
+        {
+            ConsoleScreen.LogError("No type is set to profile, use `set_class_to_profile` first.");
+            return;
+        }
+
+        if (_isEnabled == enabled)
+        {
+            var str = enabled ? "Enabled" : "Disabled";
+            ConsoleScreen.LogError($"Profiler is already {str}");
+            return;
+        }
+        
+        switch (enabled)
+        {
+            case true:
+                AnalyticsModels.Clear();
+                PatchAll();
+                break;
+            
+            case false:
+                UnPatchAll();
+                break;
+        }
+
+        _isEnabled = enabled;
+    }
+    
+    public void SetTypeToProfile(string typeString)
+    {
+        var type = AccessTools.TypeByName(typeString);
+        
+        if (type is null)
+        {
+            ConsoleScreen.LogError($"Could not resolve type `{typeString}`");
+            return;
+        }
+
+        _currentTypeProfiling = type;
+        _isEnabled = true;
+        UnPatchAll();
         PatchAll();
     }
     
@@ -36,7 +79,7 @@ public class ClassProfiler(Type targetType)
             .ThenByDescending(t => t.Value.AvgTime)
             .ToJson();
         
-        File.WriteAllText(Path.Combine(_path, $"{targetType.Name}_timings.json"), json);
+        File.WriteAllText(Path.Combine(AssemblyPath, $"{_currentTypeProfiling!.Name}_timings.json"), json);
         
         Plugin.Log!.LogWarning("Analytics dumped to disk...");
     }
@@ -45,11 +88,11 @@ public class ClassProfiler(Type targetType)
     {
         try
         {
-            foreach (var method in targetType.GetMethods())
+            foreach (var method in _currentTypeProfiling!.GetMethods())
             {
                 if (method.IsVirtual) continue;
                 
-                Plugin.Log!.LogInfo($"Patching method {method.Name}");
+                Plugin.Log!.LogDebug($"Patching method {method.Name}");
                 
                 var harmonyPrefix =
                     new HarmonyMethod(AccessTools.Method(typeof(ProfilerPatch), nameof(ProfilerPatch.Prefix)));
@@ -66,6 +109,11 @@ public class ClassProfiler(Type targetType)
         }
     }
 
+    private void UnPatchAll()
+    {
+        _harmony.UnpatchSelf();
+    }
+    
     private static void AddEntry(MethodBase method, long elapsed, bool isMainThread)
     {
         if (!AnalyticsModels.TryGetValue(method, out var model))
@@ -86,20 +134,12 @@ public class ClassProfiler(Type targetType)
     {
         public static void Prefix(out Stopwatch __state)
         {
-            if (!Settings.EnableProfiler.Value)
-            {
-                __state = null;
-                return;
-            }
-            
             __state = new Stopwatch();
             __state.Restart();
         }
         
         public static void Postfix(Stopwatch __state, MethodBase __originalMethod)
         {
-            if (!Settings.EnableProfiler.Value) return;
-            
             __state.Stop();
 
             AddEntry(__originalMethod, __state.ElapsedMilliseconds, !Thread.CurrentThread.IsBackground);
