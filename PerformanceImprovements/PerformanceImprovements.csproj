@@ -102,7 +102,7 @@
 	</ItemGroup>
 	
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="copy &quot;$(TargetPath)&quot; &quot;..\..\..\BepInEx\plugins\PerformanceImprovements\$(TargetName).dll&quot;&#xD;&#xA;if $(ConfigurationName) == Debug (&#xD;&#xA;    copy &quot;$(ProjectDir)$(OutDir)$(TargetName).pdb&quot; &quot;..\..\..\BepInEx\plugins\PerformanceImprovements\$(TargetName).pdb&quot;&#xD;&#xA;) else (&#xD;&#xA;    del &quot;..\..\..\BepInEx\plugins\PerformanceImprovements\$(TargetName).pdb&quot;&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;del &quot;..\..\..\BepInEx\config\com.dirtbikercj.template.cfg&quot;" />
+		<Exec Command="copy &quot;$(TargetPath)&quot; &quot;..\..\..\BepInEx\plugins\PerformanceImprovements\$(TargetName).dll&quot;&#xD;&#xA;if $(ConfigurationName) == Debug (&#xD;&#xA;    copy &quot;$(ProjectDir)$(OutDir)$(TargetName).pdb&quot; &quot;..\..\..\BepInEx\plugins\PerformanceImprovements\$(TargetName).pdb&quot;&#xD;&#xA;) else (&#xD;&#xA;    del &quot;..\..\..\BepInEx\plugins\PerformanceImprovements\$(TargetName).pdb&quot;&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;del &quot;..\..\..\BepInEx\config\com.dirtbikercj.performanceImprovements.cfg&quot;" />
 	</Target>
 	
 </Project>

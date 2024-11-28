@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace PerformanceImprovements;
 
-[BepInPlugin("com.dirtbikercj.performanceImprovements", "Performance Improvements", "0.1.0")]
+[BepInPlugin("com.dirtbikercj.performanceImprovements", "Performance Improvements", "0.1.1")]
 [BepInDependency("com.Arys.UnityToolkit")]
 public class Plugin : BaseUnityPlugin
 {
