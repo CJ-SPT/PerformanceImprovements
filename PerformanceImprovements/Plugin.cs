@@ -40,6 +40,7 @@ public class Plugin : BaseUnityPlugin
         DontDestroyOnLoad(this);
     }
 
+#if DEBUG
     internal void Update()
     {
         if (Profiler is not null && Settings.DumpAnalytics.Value.IsDown())
@@ -47,4 +48,5 @@ public class Plugin : BaseUnityPlugin
             Profiler.DumpAnalytics();
         }
     }
+#endif
 }
