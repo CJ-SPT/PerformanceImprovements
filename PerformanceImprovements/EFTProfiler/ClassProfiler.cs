@@ -90,7 +90,7 @@ public class ClassProfiler()
         {
             foreach (var method in _currentTypeProfiling!.GetMethods())
             {
-                if (method.IsVirtual) continue;
+                if (method.IsVirtual || !method.IsDeclaredMember()) continue;
                 
                 Plugin.Log!.LogDebug($"Patching method {method.Name}");
                 

@@ -98,7 +98,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Patches\" />
+	  <Folder Include="Bots\Navigation\" />
 	</ItemGroup>
 	
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">

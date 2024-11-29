@@ -1,14 +1,10 @@
 ﻿using BepInEx;
 using DrakiaXYZ.VersionChecker;
 using System;
-using System.Linq;
-using System.Reflection;
 using BepInEx.Logging;
-using EFT;
 using JetBrains.Annotations;
 using PerformanceImprovements.EFTProfiler;
 using PerformanceImprovements.Utils;
-using UnityEngine;
 
 namespace PerformanceImprovements;
 
@@ -21,7 +17,7 @@ public class Plugin : BaseUnityPlugin
     [CanBeNull] internal static ManualLogSource Log;
     [CanBeNull] internal static ClassProfiler Profiler;
     
-    internal void Awake()
+    private void Awake()
     {
         if (!VersionChecker.CheckEftVersion(Logger, Info, Config))
         {
@@ -30,6 +26,8 @@ public class Plugin : BaseUnityPlugin
 
         Log = Logger;
         Settings.Bind(Config);
+        
+        R.GetReflectionInfo();
         PatchManager.EnablePatches();
 
 #if DEBUG
@@ -41,7 +39,7 @@ public class Plugin : BaseUnityPlugin
     }
 
 #if DEBUG
-    internal void Update()
+    private void Update()
     {
         if (Profiler is not null && Settings.DumpAnalytics.Value.IsDown())
         {
