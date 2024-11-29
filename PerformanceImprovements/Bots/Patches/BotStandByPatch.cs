@@ -72,7 +72,6 @@ public class BotStandByPatch : ModulePatch
             if (___standByType != BotStandByType.active) return false;
 
             __instance.StandByType = BotStandByType.paused;
-            Logger.LogWarning("Disabling Bot");
             return false;
         }
         
@@ -81,7 +80,6 @@ public class BotStandByPatch : ModulePatch
             if (___standByType != BotStandByType.paused) return false;
             
             __instance.StandByType = BotStandByType.active;
-            Logger.LogWarning("Enabling Bot");
         }
         
         return false;
