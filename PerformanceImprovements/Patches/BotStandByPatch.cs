@@ -57,7 +57,17 @@ public class BotStandByPatch : ModulePatch
     [PatchPrefix]
     public static bool PatchPrefix(BotStandBy __instance, BotOwner ___botOwner_0, BotStandByType ___standByType, ref float ____nextCheckTime)
     {
-        if (!IsEnabled) return false;
+        if (!IsEnabled)
+        {
+            // Mod is disabled, reactivate bots
+            if (__instance.StandByType == BotStandByType.paused)
+            {
+                __instance.StandByType = BotStandByType.active;
+            }
+            
+            return false;
+        }
+        
         if (____nextCheckTime > Time.time && !CanBotBeDisabled(___botOwner_0.GetPlayer)) return false;
     
         ____nextCheckTime = Time.time + 10f;
