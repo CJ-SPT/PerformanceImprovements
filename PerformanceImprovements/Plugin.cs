@@ -8,7 +8,7 @@ using PerformanceImprovements.Utils;
 
 namespace PerformanceImprovements;
 
-[BepInPlugin("com.dirtbikercj.performanceImprovements", "Performance Improvements", "0.1.1")]
+[BepInPlugin("com.dirtbikercj.performanceImprovements", "Performance Improvements", "0.1.2")]
 [BepInDependency("com.Arys.UnityToolkit")]
 public class Plugin : BaseUnityPlugin
 {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BepInEx.Configuration;
+using EFT.Settings.Graphics;
 using UnityEngine;
 
 namespace PerformanceImprovements.Utils;
@@ -27,12 +28,20 @@ public static class Settings
     public static ConfigEntry<int> StreetsDisableDistance;
     public static ConfigEntry<int> GroundZeroDisableDistance;
     
+    private const string ScopeResolutionSection = "Scope Resolution";
+    public static ConfigEntry<bool> EnableScopeResolutionMod;
+    public static ConfigEntry<float> SamplingDownScale;
+    public static ConfigEntry<EDLSSMode> DlssMode;
+    public static ConfigEntry<EFSR2Mode> Fsr2Mode;
+    public static ConfigEntry<EFSR3Mode> Fsr3Mode;
+    
     public static void Bind(ConfigFile config)
     {
 #if DEBUG
         BindDebugOptions(config);
 #endif
         BindBotLimiter(config);
+        BindScopeResolutionOptions(config);
         RecalcOrder();
     }
 
@@ -165,6 +174,54 @@ public static class Settings
                 new ConfigurationManagerAttributes { })));
     }
 
+    private static void BindScopeResolutionOptions(ConfigFile config)
+    {
+        ConfigEntries.Add(EnableScopeResolutionMod = config.Bind(
+            ScopeResolutionSection,
+            "Enable Dynamic Scope Resolution",
+            true,
+            new ConfigDescription(
+                "Should rendering resolutions change when scoped in?",
+                null,
+                new ConfigurationManagerAttributes { })));
+        
+        ConfigEntries.Add(SamplingDownScale = config.Bind(
+            ScopeResolutionSection,
+            "Super Sampling",
+            0.5f,
+            new ConfigDescription(
+                "How much down sampling to apply, this only works if there is no DLSS or FSR mode enabled.",
+                new AcceptableValueRange<float>(0f, 1f),
+                new ConfigurationManagerAttributes { })));
+        
+        ConfigEntries.Add(DlssMode = config.Bind(
+            ScopeResolutionSection,
+            "DLSS mode",
+            EDLSSMode.Off,
+            new ConfigDescription(
+                "The DLSS mode to apply to optics, this is only used if DLSS is the selected scaling mode in the EFT graphics settings.",
+                null,
+                new ConfigurationManagerAttributes { })));
+        
+        ConfigEntries.Add(Fsr2Mode = config.Bind(
+            ScopeResolutionSection,
+            "FSR2 mode",
+            EFSR2Mode.Off,
+            new ConfigDescription(
+                "The FSR2 mode to apply to optics, this is only used if FSR2 is the selected scaling mode in the EFT graphics settings.",
+                null,
+                new ConfigurationManagerAttributes { })));
+        
+        ConfigEntries.Add(Fsr3Mode = config.Bind(
+            ScopeResolutionSection,
+            "FSR3 mode",
+            EFSR3Mode.Off,
+            new ConfigDescription(
+                "The FSR3 mode to apply to optics, this is only used if FSR3 is the selected scaling mode in the EFT graphics settings.",
+                null,
+                new ConfigurationManagerAttributes { })));
+    }
+    
     private static void BindDebugOptions(ConfigFile config)
     {
         ConfigEntries.Add(DumpAnalytics = config.Bind(

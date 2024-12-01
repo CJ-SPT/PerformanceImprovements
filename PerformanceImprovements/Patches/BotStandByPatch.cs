@@ -73,7 +73,7 @@ public class BotStandByPatch : ModulePatch
         ____nextCheckTime = Time.time + 10f;
         
         var mainPlayer = GameUtils.GetMainPlayer();
-        var trueDistance = Vector3.Distance(((IPlayer)___botOwner_0.GetPlayer).Position, ((IPlayer)mainPlayer).Position);
+        var trueDistance = Vector3.Distance(___botOwner_0.GetPlayer.Position, mainPlayer.Position);
         var disableDistance = LocationDistances[mainPlayer.Location].Invoke();
         var enableDistance = disableDistance - 25;
         

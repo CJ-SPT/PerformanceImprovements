@@ -80,6 +80,9 @@
 		<Reference Include="UnityEngine.AnimationModule">
 			<HintPath>..\..\..\EscapeFromTarkov_Data\managed\UnityEngine.AnimationModule.dll</HintPath>
 		</Reference>
+		<Reference Include="Unity.Postprocessing.Runtimee">
+			<HintPath>..\..\..\EscapeFromTarkov_Data\managed\Unity.Postprocessing.Runtime.dll</HintPath>
+		</Reference>
 		<Reference Include="UniTask">
 			<HintPath>$(SolutionDir)UnityToolkit\UniTask.dll</HintPath>
 		</Reference>
@@ -99,7 +102,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Bots\Navigation\" />
-	  <Folder Include="Bots\Patches\" />
 	</ItemGroup>
 	
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
