@@ -6,7 +6,7 @@ using HarmonyLib;
 using SPT.Reflection.Patching;
 using UnityEngine.AI;
 
-namespace PerformanceImprovements.Bots.Patches;
+namespace PerformanceImprovements.Patches;
 
 public class DeadBodiesControllerAddBodyPatch : ModulePatch
 {

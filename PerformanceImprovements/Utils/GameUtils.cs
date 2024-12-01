@@ -21,6 +21,11 @@ internal static class GameUtils
     {
         return GetGameWorld().MainPlayer;
     }
+
+    public static CameraClass GetCameraClass()
+    {
+        return CameraClass.Instance;
+    }
     
     public static bool IsInHideout()
     {
