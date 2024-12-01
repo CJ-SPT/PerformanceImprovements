@@ -179,7 +179,7 @@ public static class Settings
         ConfigEntries.Add(EnableScopeResolutionMod = config.Bind(
             ScopeResolutionSection,
             "Enable Dynamic Scope Resolution",
-            true,
+            false,
             new ConfigDescription(
                 "Should rendering resolutions change when scoped in?",
                 null,
