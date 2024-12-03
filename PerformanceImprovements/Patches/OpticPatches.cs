@@ -59,6 +59,8 @@ public class ChangeAimingModePatch : ModulePatch
     [PatchPostfix]
     public static void PatchPostfix()
     {
+        if (!Settings.EnableScopeResolutionMod.Value) return;
+        
         var player = GameUtils.GetMainPlayer();
         var isAiming = player.ProceduralWeaponAnimation.IsAiming;
         var aimMod = player.ProceduralWeaponAnimation.CurrentAimingMod;
