@@ -9,7 +9,6 @@ namespace PerformanceImprovements.Utils;
 public static class GraphicsUtils
 {
     private static SharedGameSettingsClass _sharedGameSettings;
-    private static GClass1039 _clonedSettings;
     private static FieldInfo SsaaImplField;
     
     static GraphicsUtils()
@@ -70,9 +69,6 @@ public static class GraphicsUtils
     
     public static void SetScopeResolution()
     {
-        // Backup the current graphic settings
-        _clonedSettings = GetGameSettings().Graphics.Settings.Clone();
-        
         var camera = GameUtils.GetCameraClass();
 
         if (!IsDlssEnabled() && !IsFsr2Enabled() && !IsFsr3Enabled() && Settings.SamplingDownScale.Value < GetSuperSamplingFactor())
@@ -102,34 +98,32 @@ public static class GraphicsUtils
     public static void SetDefaultResolution()
     {
         var camera = GameUtils.GetCameraClass();
-
-        if (!_clonedSettings.DLSSEnabled || !_clonedSettings.FSR2Enabled || !_clonedSettings.FSR3Enabled)
+        
+        if (!IsDlssEnabled() || !IsFsr3Enabled() || !IsFsr3Enabled())
         {
             ((SSAAImpl)SsaaImplField.GetValue(camera))
-                .Switch(Mathf.Clamp(_clonedSettings.SuperSamplingFactor, 0f, 1f));
+                .Switch(Mathf.Clamp(GetSuperSamplingFactor(), 0f, 1f));
         }
         
-        if (_clonedSettings.DLSSEnabled)
+        if (IsDlssEnabled())
         {
             camera.SetAntiAliasing(
-                _clonedSettings.AntiAliasing.Value, _clonedSettings.DLSSMode.Value, 
-                _clonedSettings.FSR2Mode.Value, _clonedSettings.FSR3Mode.Value
+                GetAAMode(), GetCurrentDlssMode(), 
+                GetCurrentFsr2Mode(), GetCurrentFsr3Mode()
                 );
             
             return;
         }
         
-        if (_clonedSettings.FSR2Enabled)
+        if (IsFsr2Enabled())
         {
-            camera.SetFSR2(_clonedSettings.FSR2Mode.Value);
+            camera.SetFSR2(GetCurrentFsr2Mode());
             return;
         }
 
-        if (_clonedSettings.FSR3Enabled)
+        if (IsFsr3Enabled())
         {
-            camera.SetFSR3(_clonedSettings.FSR3Mode.Value);
+            camera.SetFSR3(GetCurrentFsr3Mode());
         }
-
-        _clonedSettings = null;
     }
 }
