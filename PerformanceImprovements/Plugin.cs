@@ -3,12 +3,15 @@ using DrakiaXYZ.VersionChecker;
 using System;
 using BepInEx.Logging;
 using JetBrains.Annotations;
+using PerformanceImprovements.Core;
 using PerformanceImprovements.EFTProfiler;
+using PerformanceImprovements.Threading;
 using PerformanceImprovements.Utils;
+using UnityEngine;
 
 namespace PerformanceImprovements;
 
-[BepInPlugin("com.dirtbikercj.performanceImprovements", "Performance Improvements", "0.1.2")]
+[BepInPlugin("com.dirtbikercj.performanceImprovements", "Performance Improvements", "0.2.0")]
 [BepInDependency("com.Arys.UnityToolkit")]
 public class Plugin : BaseUnityPlugin
 {
@@ -16,6 +19,8 @@ public class Plugin : BaseUnityPlugin
 
     [CanBeNull] internal static ManualLogSource Log;
     [CanBeNull] internal static ClassProfiler Profiler;
+
+    internal static GameObject HookObject;
     
     private void Awake()
     {
@@ -25,8 +30,13 @@ public class Plugin : BaseUnityPlugin
         }
 
         Log = Logger;
-        Settings.Bind(Config);
         
+        HookObject = new GameObject();
+        DontDestroyOnLoad(HookObject);
+        HookObject.AddComponent<UnityMainThreadDispatcher>();
+        // HookObject.AddComponent<SceneCleaner>();
+        
+        Settings.Bind(Config);
         R.GetReflectionInfo();
         PatchManager.EnablePatches();
 

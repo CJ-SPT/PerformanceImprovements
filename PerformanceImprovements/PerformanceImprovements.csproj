@@ -83,6 +83,9 @@
 		<Reference Include="Unity.Postprocessing.Runtimee">
 			<HintPath>..\..\..\EscapeFromTarkov_Data\managed\Unity.Postprocessing.Runtime.dll</HintPath>
 		</Reference>
+		<Reference Include="UnityEngine.ParticleSystemModule">
+			<HintPath>..\..\..\EscapeFromTarkov_Data\managed\UnityEngine.ParticleSystemModule.dll</HintPath>
+		</Reference>
 		<Reference Include="UniTask">
 			<HintPath>$(SolutionDir)UnityToolkit\UniTask.dll</HintPath>
 		</Reference>
@@ -101,7 +104,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Bots\Navigation\" />
+	  <None Remove="json\CleanUpNames.json" />
+	  <EmbeddedResource Include="json\CleanUpNames.json" />
 	</ItemGroup>
 	
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">

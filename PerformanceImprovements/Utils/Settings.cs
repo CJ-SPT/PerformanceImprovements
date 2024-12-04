@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using BepInEx.Configuration;
 using EFT.Settings.Graphics;
+using Newtonsoft.Json;
+using PerformanceImprovements.Models;
 using UnityEngine;
 
 namespace PerformanceImprovements.Utils;
@@ -35,6 +39,16 @@ public static class Settings
     public static ConfigEntry<EFSR2Mode> Fsr2Mode;
     public static ConfigEntry<EFSR3Mode> Fsr3Mode;
     
+    private const string SceneCleanerSection = "Clutter";
+    public static ConfigEntry<bool> EnableSceneCleaner;
+    public static ConfigEntry<bool> DisableGarbage;
+    public static ConfigEntry<bool> DisableHeaps;
+    public static ConfigEntry<bool> DisableSpentCartridges;
+    public static ConfigEntry<bool> DisableFoodDrink;
+    public static ConfigEntry<bool> DisableDecals;
+    public static ConfigEntry<bool> DisablePuddles;
+    public static ConfigEntry<bool> DisableShards;
+    
     public static void Bind(ConfigFile config)
     {
 #if DEBUG
@@ -42,6 +56,8 @@ public static class Settings
 #endif
         BindBotLimiter(config);
         BindScopeResolutionOptions(config);
+        // BindSceneCleanerOptions(config);
+        
         RecalcOrder();
     }
 
@@ -221,6 +237,81 @@ public static class Settings
                 null,
                 new ConfigurationManagerAttributes { })));
     }
+
+    private static void BindSceneCleanerOptions(ConfigFile config)
+    {
+        ConfigEntries.Add(EnableSceneCleaner = config.Bind(
+            SceneCleanerSection,
+            "Scene Cleaner Enabled",
+            true,
+            new ConfigDescription(
+                "Master scene cleaner option, needs to be enabled for anything else in this section to function.",
+                null,
+                new ConfigurationManagerAttributes { })));
+        
+        ConfigEntries.Add(DisableGarbage = config.Bind(
+            SceneCleanerSection,
+            "Disable Garbage",
+            true,
+            new ConfigDescription(
+                "The garbage man came to town.",
+                null,
+                new ConfigurationManagerAttributes { })));
+        
+        ConfigEntries.Add(DisableHeaps = config.Bind(
+            SceneCleanerSection,
+            "Disable Heaps",
+            true,
+            new ConfigDescription(
+                "The garbage man came to town.",
+                null,
+                new ConfigurationManagerAttributes { })));
+        
+        ConfigEntries.Add(DisableSpentCartridges = config.Bind(
+            SceneCleanerSection,
+            "Disable Spent Cartridges",
+            true,
+            new ConfigDescription(
+                "Pick up your brass.",
+                null,
+                new ConfigurationManagerAttributes { })));
+        
+        ConfigEntries.Add(DisableFoodDrink = config.Bind(
+            SceneCleanerSection,
+            "Disable Food&Drink",
+            true,
+            new ConfigDescription(
+                "Does anyone even read these?",
+                null,
+                new ConfigurationManagerAttributes { })));
+        
+        ConfigEntries.Add(DisableDecals = config.Bind(
+            SceneCleanerSection,
+            "Disable Decals",
+            true,
+            new ConfigDescription(
+                "The stickers? ",
+                null,
+                new ConfigurationManagerAttributes { })));
+        
+        ConfigEntries.Add(DisablePuddles = config.Bind(
+            SceneCleanerSection,
+            "Disable Puddles",
+            true,
+            new ConfigDescription(
+                "No more wet feet.",
+                null,
+                new ConfigurationManagerAttributes { })));
+        
+        ConfigEntries.Add(DisableShards = config.Bind(
+            SceneCleanerSection,
+            "Disable Shards",
+            true,
+            new ConfigDescription(
+                "Stepping on glass sucks.",
+                null,
+                new ConfigurationManagerAttributes { })));
+    }
     
     private static void BindDebugOptions(ConfigFile config)
     {
@@ -231,7 +322,7 @@ public static class Settings
             new ConfigDescription(
                 "Dump the analytics json to disk",
                 null,
-                new ConfigurationManagerAttributes { IsAdvanced = true, Browsable = false})));
+                new ConfigurationManagerAttributes { IsAdvanced = true, Browsable = false })));
     }
     
     private static void RecalcOrder()
@@ -248,5 +339,18 @@ public static class Settings
 
             settingOrder--;
         }
+    }
+
+    public static CleanUpNameModel GetCleanUpNamesJson()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        const string path = "PerformanceImprovements.json.CleanUpNames.json";
+
+        using var stream = assembly.GetManifestResourceStream(path);
+        using var reader = new StreamReader(stream!);
+        
+        var json = reader.ReadToEnd();
+        
+        return JsonConvert.DeserializeObject<CleanUpNameModel>(json);
     }
 }
