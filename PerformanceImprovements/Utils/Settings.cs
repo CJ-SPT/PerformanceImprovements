@@ -54,7 +54,12 @@ public static class Settings
 #if DEBUG
         BindDebugOptions(config);
 #endif
-        BindBotLimiter(config);
+        // Disable the bot limiter if incompatible plugins are found.
+        if (!Plugin.DisableBotLimiter)
+        { 
+            BindBotLimiter(config);
+        }
+        
         BindScopeResolutionOptions(config);
         // BindSceneCleanerOptions(config);
         

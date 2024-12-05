@@ -23,6 +23,7 @@ public class BotStandByPatch : ModulePatch
         WildSpawnType.followerBirdEye,
         WildSpawnType.bossKolontay,
         WildSpawnType.bossKojaniy,          // Shturman
+        WildSpawnType.bossPartisan,
         WildSpawnType.bossSanitar,
         WildSpawnType.bossTagilla,
         WildSpawnType.bossZryachiy,
@@ -57,15 +58,17 @@ public class BotStandByPatch : ModulePatch
     [PatchPrefix]
     public static bool PatchPrefix(BotStandBy __instance, BotOwner ___botOwner_0, BotStandByType ___standByType, ref float ____nextCheckTime)
     {
+        if (Plugin.DisableBotLimiter) return true;
+        
         if (!IsEnabled)
         {
-            // Mod is disabled, reactivate bots
+            // Mod is disabled, reactivate bots and let the base code handle things
             if (__instance.StandByType == BotStandByType.paused)
             {
                 __instance.StandByType = BotStandByType.active;
             }
             
-            return false;
+            return true;
         }
         
         if (____nextCheckTime > Time.time && !CanBotBeDisabled(___botOwner_0.GetPlayer)) return false;
