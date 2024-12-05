@@ -23,8 +23,7 @@ public class Plugin : BaseUnityPlugin
     
     private static bool _isFikaPresent;
     private static bool _isQuestingBotsPresent;
-    
-    internal static readonly bool DisableBotLimiter = _isFikaPresent || _isQuestingBotsPresent;
+    internal static bool DisableBotLimiter => _isFikaPresent || _isQuestingBotsPresent;
     
     [CanBeNull] internal static ManualLogSource Log;
     [CanBeNull] internal static ClassProfiler Profiler;
