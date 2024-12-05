@@ -80,19 +80,19 @@ public class BotStandByPatch : ModulePatch
         var disableDistance = LocationDistances[mainPlayer.Location].Invoke();
         var enableDistance = disableDistance - 25;
         
-        if (trueDistance > disableDistance)
-        {
-            if (___standByType != BotStandByType.active) return false;
-
-            __instance.StandByType = BotStandByType.paused;
-            return false;
-        }
-        
         if (trueDistance < enableDistance)
         {
             if (___standByType != BotStandByType.paused) return false;
             
             __instance.StandByType = BotStandByType.active;
+            return false;
+        }
+        
+        if (trueDistance > disableDistance)
+        {
+            if (___standByType != BotStandByType.active) return false;
+
+            __instance.StandByType = BotStandByType.paused;
         }
         
         return false;
