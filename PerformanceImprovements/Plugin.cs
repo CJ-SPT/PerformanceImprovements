@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace PerformanceImprovements;
 
-[BepInPlugin("com.dirtbikercj.performanceImprovements", "Performance Improvements", "0.2.0")]
+[BepInPlugin("com.dirtbikercj.performanceImprovements", "Performance Improvements", "0.1.3")]
 [BepInDependency("com.Arys.UnityToolkit")]
 [BepInDependency("com.fika.core", BepInDependency.DependencyFlags.SoftDependency)] // Used to disable the bot limiter
 [BepInDependency("com.DanW.QuestingBots", BepInDependency.DependencyFlags.SoftDependency)] // Used to disable the bot limiter
