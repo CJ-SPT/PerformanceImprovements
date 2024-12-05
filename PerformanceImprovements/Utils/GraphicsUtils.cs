@@ -74,7 +74,9 @@ public static class GraphicsUtils
         if (!IsDlssEnabled() && !IsFsr2Enabled() && !IsFsr3Enabled() && Settings.SamplingDownScale.Value < GetSuperSamplingFactor())
         {
             ((SSAAImpl)SsaaImplField.GetValue(camera))
-                .Switch(Mathf.Clamp(Settings.SamplingDownScale.Value, 0f, 1f));
+                .Switch(Mathf.Clamp(Settings.SamplingDownScale.Value, 0.01f, 0.99f));
+            
+            return;
         }
         
         if (IsDlssEnabled())
@@ -102,7 +104,9 @@ public static class GraphicsUtils
         if (!IsDlssEnabled() || !IsFsr3Enabled() || !IsFsr3Enabled())
         {
             ((SSAAImpl)SsaaImplField.GetValue(camera))
-                .Switch(Mathf.Clamp(GetSuperSamplingFactor(), 0f, 1f));
+                .Switch(Mathf.Clamp(GetSuperSamplingFactor(), 0.01f, 0.99f));
+            
+            return;
         }
         
         if (IsDlssEnabled())

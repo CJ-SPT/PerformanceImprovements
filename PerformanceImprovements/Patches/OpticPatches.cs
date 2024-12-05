@@ -9,8 +9,6 @@ namespace PerformanceImprovements.Patches;
 
 public class OpticEnablePatch : ModulePatch
 {
-    public static bool ScopeResolutionChanged;
-    
     protected override MethodBase GetTargetMethod()
     {
         return AccessTools.Method(typeof(OpticSight), nameof(OpticSight.OnEnable));
@@ -20,7 +18,6 @@ public class OpticEnablePatch : ModulePatch
     public static void PatchPostfix()
     {
         if (!Settings.EnableScopeResolutionMod.Value) return;
-        if (!GameUtils.IsInRaid()) return;
 
         var player = GameUtils.GetMainPlayer();
         var isAiming = player.ProceduralWeaponAnimation.IsAiming;
@@ -30,7 +27,6 @@ public class OpticEnablePatch : ModulePatch
         if (isAiming && isOptic && aimMod is not null)
         {
             GraphicsUtils.SetScopeResolution();
-            ScopeResolutionChanged = true;
         }
     }
 }

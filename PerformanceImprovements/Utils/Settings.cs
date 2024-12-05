@@ -212,7 +212,7 @@ public static class Settings
             0.5f,
             new ConfigDescription(
                 "How much down sampling to apply, this only works if there is no DLSS or FSR mode enabled.",
-                new AcceptableValueRange<float>(0.20f, 1f),
+                new AcceptableValueRange<float>(0.01f, 0.99f),
                 new ConfigurationManagerAttributes { })));
         
         ConfigEntries.Add(DlssMode = config.Bind(
