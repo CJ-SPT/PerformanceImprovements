@@ -1,7 +1,4 @@
-﻿using System;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using Cysharp.Threading.Tasks;
 using EFT;
 using HarmonyLib;
@@ -11,6 +8,7 @@ using UnityEngine;
 
 namespace PerformanceImprovements.Bots.Patches;
 
+[ExperimentalPatch]
 public class BotOwnerMethod9 : ModulePatch
 {
     private static GameWorld _gameWorld;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using PerformanceImprovements.Config;
 using SPT.Reflection.Patching;
 
 namespace PerformanceImprovements.Utils;
@@ -36,12 +37,20 @@ public static class PatchManager
     
     private static IEnumerable<Type> GetAllPatches()
     {
-        return Assembly.GetExecutingAssembly().GetTypes()
+        var patches = Assembly.GetExecutingAssembly().GetTypes()
             .Where(t => t.BaseType == typeof(ModulePatch) && 
                         t.GetCustomAttribute(typeof(DisablePatchAttribute)) == null);
+        
+        return Settings.UseExperimentalPatches.Value
+            ? patches
+            : patches.Where(t => t.GetCustomAttribute(typeof(ExperimentalPatchAttribute)) == null);
     }
 }
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class DisablePatchAttribute : Attribute
+{ }
+
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+public class ExperimentalPatchAttribute : Attribute
 { }

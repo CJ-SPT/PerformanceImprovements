@@ -16,6 +16,9 @@ public static class Settings
     private const string ProfilerSection = "Profiler";
     public static ConfigEntry<KeyboardShortcut> DumpAnalytics;
 
+    private const string GeneralSection = "General";
+    public static ConfigEntry<bool> UseExperimentalPatches;
+    
     private const string BotLimitSection = "Bot Limiter";
     public static ConfigEntry<bool> EnableBotLimiter;
     public static ConfigEntry<bool> DisableScavs;
@@ -54,6 +57,8 @@ public static class Settings
 #if DEBUG
         BindDebugOptions(config);
 #endif
+        BindGeneral(config);
+        
         // Disable the bot limiter if incompatible plugins are found.
         if (!Plugin.DisableBotLimiter)
         { 
@@ -64,6 +69,18 @@ public static class Settings
         // BindSceneCleanerOptions(config);
         
         RecalcOrder();
+    }
+
+    private static void BindGeneral(ConfigFile config)
+    {
+        ConfigEntries.Add(UseExperimentalPatches = config.Bind(
+            GeneralSection,
+            "Use Experimental Patches",
+            true,
+            new ConfigDescription(
+                "Enables or disables the use of experimental patches. Requires a restart. These range from logic optimizations to threading optimizations.",
+                null,
+                new ConfigurationManagerAttributes { })));
     }
 
     private static void BindBotLimiter(ConfigFile config)
