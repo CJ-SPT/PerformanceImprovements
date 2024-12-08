@@ -7,7 +7,7 @@ using PerformanceImprovements.Graphics;
 using PerformanceImprovements.Utils;
 using SPT.Reflection.Patching;
 
-namespace PerformanceImprovements.Patches;
+namespace PerformanceImprovements.Graphics.Patches;
 
 public class OpticEnablePatch : ModulePatch
 {
