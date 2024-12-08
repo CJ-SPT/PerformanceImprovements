@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using EFT;
 using HarmonyLib;
@@ -12,6 +15,8 @@ namespace PerformanceImprovements.Bots.Patches;
 public class BotOwnerMethod9 : ModulePatch
 {
     private static GameWorld _gameWorld;
+    
+    private static CancellationToken _cancellationToken;
     
     protected override MethodBase GetTargetMethod()
     {
@@ -30,7 +35,7 @@ public class BotOwnerMethod9 : ModulePatch
             _gameWorld = GameUtils.GetGameWorld();
         }
         
-        UniTask.RunOnThreadPool(() => GetHit(
+        Task.Run(() => GetHit(
             __instance, 
             damageInfo, 
             bodyType, 
@@ -40,7 +45,7 @@ public class BotOwnerMethod9 : ModulePatch
         return false;
     }
 
-    private static async UniTaskVoid GetHit(
+    private static Task GetHit(
         BotOwner owner,
         DamageInfoStruct damageInfo,
         EBodyPart bodyType,
@@ -52,7 +57,7 @@ public class BotOwnerMethod9 : ModulePatch
 
         if (damageInfo.Player == null)
         {
-            return;
+            return Task.CompletedTask;
         }
 
         // This did a lot of unnecessary checks before
@@ -66,7 +71,7 @@ public class BotOwnerMethod9 : ModulePatch
         owner.BotPersonalStats.GetHit(damageInfo, bodyType);
         owner.Memory.GetHit(damageInfo);
         
-        if (damageInfo.Player.iPlayer == null) return;
+        if (damageInfo.Player.iPlayer == null) return Task.CompletedTask;
 
         lock (owner.EnemiesController.EnemyInfos)
         {
@@ -81,6 +86,6 @@ public class BotOwnerMethod9 : ModulePatch
             owner.BotTalk.TrySay(EPhraseTrigger.FriendlyFire);
         }
         
-        await UniTask.Yield();
+        return Task.CompletedTask;
     }
 }

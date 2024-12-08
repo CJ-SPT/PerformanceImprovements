@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using EFT;
 using HarmonyLib;
@@ -22,13 +24,13 @@ public class DeadBodiesControllerAddBodyPatch : ModulePatch
     [PatchPrefix]
     public static bool PatchPrefix(DeadBodiesController __instance, IPlayer player)
     {
-        UniTask.RunOnThreadPool(() => AddBody(__instance, player));
+        Task.Run(() => AddBody(__instance, player));
         return false;
     }
 
-    private static UniTask AddBody(DeadBodiesController deadBodiesController, IPlayer player)
+    private static Task AddBody(DeadBodiesController deadBodiesController, IPlayer player)
     {
-        if (deadBodiesController.HaveBody(player)) return UniTask.CompletedTask;
+        if (deadBodiesController.HaveBody(player)) return Task.CompletedTask;
 
         var groupList = new List<BotsGroup>();
         
@@ -45,7 +47,7 @@ public class DeadBodiesControllerAddBodyPatch : ModulePatch
             }
         }
 
-        if (groupList.Count == 0) return UniTask.CompletedTask;
+        if (groupList.Count == 0) return Task.CompletedTask;
 
         BotsGroup botsGroup = null;
         
@@ -63,7 +65,7 @@ public class DeadBodiesControllerAddBodyPatch : ModulePatch
             }
         }
 
-        if (botsGroup is null) return UniTask.CompletedTask;
+        if (botsGroup is null) return Task.CompletedTask;
         
         var gclass = new GClass361(
             botsGroup, 
@@ -80,6 +82,6 @@ public class DeadBodiesControllerAddBodyPatch : ModulePatch
         
         deadBodiesController.Bodies.Add(gclass);
         
-        return UniTask.CompletedTask;
+        return Task.CompletedTask;
     }
 }
