@@ -4,19 +4,14 @@ namespace PerformanceImprovements.Utils;
 
 public class Logger
 {
-    private static ManualLogSource _logger;
+    private static ManualLogSource _logger => Plugin.Log;
 
 #if DEBUG
-    private static bool _debug = false;
-#else
     private static bool _debug = true;
+#else
+    private static bool _debug = false;
 #endif
     
-    static Logger()
-    {
-        _logger = new ManualLogSource("PI Logger");
-    }
-
     public static void Debug(string message)
     {
         if (!_debug) return;

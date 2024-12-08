@@ -5,6 +5,7 @@ using HarmonyLib;
 using PerformanceImprovements.Config;
 using PerformanceImprovements.Utils;
 using UnityEngine;
+using Logger = PerformanceImprovements.Utils.Logger;
 
 namespace PerformanceImprovements.Graphics;
 
@@ -35,17 +36,17 @@ public static class GraphicsUtils
     
     private static bool IsDlssEnabled()
     {
-        return GetGameSettings().Graphics.Settings.DLSSEnabled;
+        return GetGameSettings().Graphics.Settings.DLSSMode.Value != EDLSSMode.Off;
     }
     
     private static bool IsFsr2Enabled()
     {
-        return GetGameSettings().Graphics.Settings.FSR2Enabled;
+        return GetGameSettings().Graphics.Settings.FSR2Mode.Value != EFSR2Mode.Off;
     }
     
     private static bool IsFsr3Enabled()
     {
-        return GetGameSettings().Graphics.Settings.FSR3Enabled;
+        return GetGameSettings().Graphics.Settings.FSR3Mode.Value != EFSR3Mode.Off;
     }
     
     private static EAntialiasingMode GetDefaultAAMode()
@@ -76,7 +77,12 @@ public static class GraphicsUtils
     public static void SetScopeResolution()
     {
         var camera = GameUtils.GetCameraClass();
-
+        
+        //Logger.Info($"DLSS ENABLED: {IsDlssEnabled()} MODE: {GetDefaultDlssMode()}");
+        //Logger.Info($"FSR2 ENABLED: {IsFsr2Enabled()} MODE: {GetDefaultFsr2Mode()}");
+        //Logger.Info($"FSR3 ENABLED: {IsFsr3Enabled()} MODE: {GetDefaultFsr3Mode()}");
+        //Logger.Info($"SS Factor: {GetDefaultSsFactor()}");
+        
         if (!IsDlssEnabled() && !IsFsr2Enabled() && !IsFsr3Enabled() && Settings.SamplingDownScale.Value < GetDefaultSsFactor())
         {
             ((SSAAImpl)SsaaImplField.GetValue(camera))
@@ -107,7 +113,12 @@ public static class GraphicsUtils
     {
         var camera = GameUtils.GetCameraClass();
         
-        if (!IsDlssEnabled() || !IsFsr3Enabled() || !IsFsr3Enabled())
+        Logger.Info($"DLSS ENABLED: {IsDlssEnabled()} MODE: {GetDefaultDlssMode()}");
+        Logger.Info($"FSR2 ENABLED: {IsFsr2Enabled()} MODE: {GetDefaultFsr2Mode()}");
+        Logger.Info($"FSR3 ENABLED: {IsFsr3Enabled()} MODE: {GetDefaultFsr3Mode()}");
+        Logger.Info($"SS Factor: {GetDefaultSsFactor()}");
+        
+        if (!IsDlssEnabled() && !IsFsr3Enabled() && !IsFsr3Enabled())
         {
             ((SSAAImpl)SsaaImplField.GetValue(camera))
                 .Switch(Mathf.Clamp(GetDefaultSsFactor(), 0.01f, 0.99f));
@@ -115,7 +126,7 @@ public static class GraphicsUtils
             return;
         }
         
-        if (IsDlssEnabled())
+        if (IsDlssEnabled() && GetDefaultDlssMode() != Settings.DlssMode.Value)
         {
             camera.SetAntiAliasing(
                 EAntialiasingMode.None, GetDefaultDlssMode(),
@@ -125,13 +136,13 @@ public static class GraphicsUtils
             return;
         }
         
-        if (IsFsr2Enabled())
+        if (IsFsr2Enabled() && GetDefaultFsr2Mode() != Settings.Fsr2Mode.Value)
         {
             camera.SetFSR2(GetDefaultFsr2Mode());
             return;
         }
 
-        if (IsFsr3Enabled())
+        if (IsFsr3Enabled() && GetDefaultFsr3Mode() != Settings.Fsr3Mode.Value)
         {
             camera.SetFSR3(GetDefaultFsr3Mode());
         }

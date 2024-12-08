@@ -10,6 +10,7 @@ using PerformanceImprovements.EFTProfiler;
 using PerformanceImprovements.Threading;
 using PerformanceImprovements.Utils;
 using UnityEngine;
+using Logger = PerformanceImprovements.Utils.Logger;
 
 namespace PerformanceImprovements;
 
@@ -28,6 +29,7 @@ public class Plugin : BaseUnityPlugin
     [CanBeNull] internal static ClassProfiler Profiler;
 
     internal static GameObject HookObject;
+    internal static ManualLogSource Log;
     
     private void Awake()
     {
@@ -35,6 +37,8 @@ public class Plugin : BaseUnityPlugin
         {
             throw new Exception("Invalid EFT Version");
         }
+
+        Log = Logger;
         
         _isFikaPresent = Chainloader.PluginInfos.Keys.Contains("com.fika.core");
         _isQuestingBotsPresent = Chainloader.PluginInfos.Keys.Contains("com.DanW.QuestingBots");
