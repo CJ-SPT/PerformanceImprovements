@@ -7,12 +7,12 @@ namespace PerformanceImprovements.EFTProfiler;
 public class AnalyticsModel
 {
     public bool IsMainThread;
-    public long MinTime;
-    public long MaxTime;
-    public long AvgTime;
+    public double MinTime;
+    public double MaxTime;
+    public double AvgTime;
     
     [JsonIgnore]
-    public readonly List<long> AllTimings = [];
+    public readonly List<double> AllTimings = [];
 
     public void CalculateBenchmark()
     {

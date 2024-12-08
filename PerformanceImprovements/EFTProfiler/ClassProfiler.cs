@@ -90,7 +90,8 @@ public class ClassProfiler()
         {
             foreach (var method in _currentTypeProfiling!.GetMethods())
             {
-                if (method.IsVirtual || !method.IsDeclaredMember()) continue;
+                if (method.IsVirtual || !method.IsDeclaredMember() ||
+                    method.IsGenericMethod) continue;
                 
                 Plugin.Log!.LogDebug($"Patching method {method.Name}");
                 
@@ -114,7 +115,7 @@ public class ClassProfiler()
         _harmony.UnpatchSelf();
     }
     
-    private static void AddEntry(MethodBase method, long elapsed, bool isMainThread)
+    private static void AddEntry(MethodBase method, double elapsed, bool isMainThread)
     {
         if (!AnalyticsModels.TryGetValue(method, out var model))
         {
@@ -142,23 +143,22 @@ public class ClassProfiler()
         {
             __state.Stop();
 
-            AddEntry(__originalMethod, __state.ElapsedMilliseconds, !Thread.CurrentThread.IsBackground);
+            var milliseconds = __state.Elapsed.TotalMilliseconds;
             
-            if (__state.ElapsedMilliseconds == 0) return;
+            AddEntry(__originalMethod, milliseconds, !Thread.CurrentThread.IsBackground);
+            
+            if (__state.Elapsed.Milliseconds == 0) return;
 
             var methodString = $"{__originalMethod.DeclaringType!.Name}.{__originalMethod.Name}()";
-            
-            if (__state.ElapsedMilliseconds > 20)
+
+            switch (milliseconds)
             {
-                Plugin.Log!.LogError($"{methodString} took {__state.ElapsedMilliseconds} ms");
-            }
-            else if (__state.ElapsedMilliseconds > 10)
-            {
-                Plugin.Log!.LogWarning($"{methodString} took {__state.ElapsedMilliseconds} ms");
-            }
-            else
-            {
-                Plugin.Log!.LogInfo($"{methodString} took {__state.ElapsedMilliseconds} ms");
+                case > 5 and < 10:
+                    Plugin.Log!.LogWarning($"{methodString} took {milliseconds} ms");
+                    break;
+                case > 10:
+                    Plugin.Log!.LogError($"{methodString} took {milliseconds} ms");
+                    break;
             }
         }
     }
