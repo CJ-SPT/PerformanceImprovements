@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using PerformanceImprovements.Models;
 using UnityEngine;
 
-namespace PerformanceImprovements.Utils;
+namespace PerformanceImprovements.Config;
 
 public static class Settings
 {

@@ -86,6 +86,9 @@
 		<Reference Include="UnityEngine.ParticleSystemModule">
 			<HintPath>..\..\..\EscapeFromTarkov_Data\managed\UnityEngine.ParticleSystemModule.dll</HintPath>
 		</Reference>
+		<Reference Include="DissonanceVoip">
+			<HintPath>..\..\..\EscapeFromTarkov_Data\managed\DissonanceVoip.dll</HintPath>
+		</Reference>
 		<Reference Include="UniTask">
 			<HintPath>$(SolutionDir)UnityToolkit\UniTask.dll</HintPath>
 		</Reference>

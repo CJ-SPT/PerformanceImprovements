@@ -2,9 +2,11 @@
 using Comfort.Common;
 using EFT.Settings.Graphics;
 using HarmonyLib;
+using PerformanceImprovements.Config;
+using PerformanceImprovements.Utils;
 using UnityEngine;
 
-namespace PerformanceImprovements.Utils;
+namespace PerformanceImprovements.Graphics;
 
 public static class GraphicsUtils
 {
@@ -42,27 +44,27 @@ public static class GraphicsUtils
         return GetGameSettings().Graphics.Settings.FSR3Enabled;
     }
     
-    private static EAntialiasingMode GetAAMode()
+    private static EAntialiasingMode GetDefaultAAMode()
     {
         return GetGameSettings().Graphics.Settings.AntiAliasing.Value;
     }
 
-    private static float GetSuperSamplingFactor()
+    private static float GetDefaultSsFactor()
     {
         return GetGameSettings().Graphics.Settings.SuperSamplingFactor;
     }
     
-    private static EDLSSMode GetCurrentDlssMode()
+    private static EDLSSMode GetDefaultDlssMode()
     {
         return GetGameSettings().Graphics.Settings.DLSSMode.Value;
     }
     
-    private static EFSR2Mode GetCurrentFsr2Mode()
+    private static EFSR2Mode GetDefaultFsr2Mode()
     {
         return GetGameSettings().Graphics.Settings.FSR2Mode.Value;
     }
     
-    private static EFSR3Mode GetCurrentFsr3Mode()
+    private static EFSR3Mode GetDefaultFsr3Mode()
     {
         return GetGameSettings().Graphics.Settings.FSR3Mode.Value;
     }
@@ -71,7 +73,7 @@ public static class GraphicsUtils
     {
         var camera = GameUtils.GetCameraClass();
 
-        if (!IsDlssEnabled() && !IsFsr2Enabled() && !IsFsr3Enabled() && Settings.SamplingDownScale.Value < GetSuperSamplingFactor())
+        if (!IsDlssEnabled() && !IsFsr2Enabled() && !IsFsr3Enabled() && Settings.SamplingDownScale.Value < GetDefaultSsFactor())
         {
             ((SSAAImpl)SsaaImplField.GetValue(camera))
                 .Switch(Mathf.Clamp(Settings.SamplingDownScale.Value, 0.01f, 0.99f));
@@ -79,19 +81,19 @@ public static class GraphicsUtils
             return;
         }
         
-        if (IsDlssEnabled())
+        if (IsDlssEnabled() && GetDefaultDlssMode() != Settings.DlssMode.Value)
         {
-            camera.SetAntiAliasing(GetAAMode(), Settings.DlssMode.Value, GetCurrentFsr2Mode(), GetCurrentFsr3Mode());
+            camera.SetAntiAliasing(GetDefaultAAMode(), Settings.DlssMode.Value, GetDefaultFsr2Mode(), GetDefaultFsr3Mode());
             return;
         }
 
-        if (IsFsr2Enabled())
+        if (IsFsr2Enabled() && GetDefaultFsr2Mode() != Settings.Fsr2Mode.Value)
         {
             camera.SetFSR2(Settings.Fsr2Mode.Value);
             return;
         }
 
-        if (IsFsr3Enabled())
+        if (IsFsr3Enabled() && GetDefaultFsr3Mode() != Settings.Fsr3Mode.Value)
         {
             camera.SetFSR3(Settings.Fsr3Mode.Value);
         }
@@ -104,30 +106,30 @@ public static class GraphicsUtils
         if (!IsDlssEnabled() || !IsFsr3Enabled() || !IsFsr3Enabled())
         {
             ((SSAAImpl)SsaaImplField.GetValue(camera))
-                .Switch(Mathf.Clamp(GetSuperSamplingFactor(), 0.01f, 0.99f));
+                .Switch(Mathf.Clamp(GetDefaultSsFactor(), 0.01f, 0.99f));
             
             return;
         }
         
-        if (IsDlssEnabled())
+        if (IsDlssEnabled() && GetDefaultDlssMode() != Settings.DlssMode.Value)
         {
             camera.SetAntiAliasing(
-                GetAAMode(), GetCurrentDlssMode(), 
-                GetCurrentFsr2Mode(), GetCurrentFsr3Mode()
+                GetDefaultAAMode(), GetDefaultDlssMode(), 
+                GetDefaultFsr2Mode(), GetDefaultFsr3Mode()
                 );
             
             return;
         }
         
-        if (IsFsr2Enabled())
+        if (IsFsr2Enabled() && GetDefaultFsr2Mode() != Settings.Fsr2Mode.Value)
         {
-            camera.SetFSR2(GetCurrentFsr2Mode());
+            camera.SetFSR2(GetDefaultFsr2Mode());
             return;
         }
 
-        if (IsFsr3Enabled())
+        if (IsFsr3Enabled() && GetDefaultFsr3Mode() != Settings.Fsr3Mode.Value)
         {
-            camera.SetFSR3(GetCurrentFsr3Mode());
+            camera.SetFSR3(GetDefaultFsr3Mode());
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using BepInEx.Bootstrap;
 using BepInEx.Logging;
 using JetBrains.Annotations;
-using PerformanceImprovements.Core;
+using PerformanceImprovements.Config;
 using PerformanceImprovements.EFTProfiler;
 using PerformanceImprovements.Threading;
 using PerformanceImprovements.Utils;

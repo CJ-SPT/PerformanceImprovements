@@ -2,6 +2,8 @@
 using EFT;
 using EFT.CameraControl;
 using HarmonyLib;
+using PerformanceImprovements.Config;
+using PerformanceImprovements.Graphics;
 using PerformanceImprovements.Utils;
 using SPT.Reflection.Patching;
 
@@ -41,6 +43,8 @@ public class OpticDisablePatch : ModulePatch
     [PatchPostfix]
     public static void PatchPostfix()
     {
+        if (!Settings.EnableScopeResolutionMod.Value) return;
+        
         GraphicsUtils.SetDefaultResolution();
     }
 }

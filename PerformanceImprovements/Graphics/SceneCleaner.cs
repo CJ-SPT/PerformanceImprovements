@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using EFT.Interactive;
+using PerformanceImprovements.Config;
 using PerformanceImprovements.Models;
 using PerformanceImprovements.Utils;
 using UnityEngine;

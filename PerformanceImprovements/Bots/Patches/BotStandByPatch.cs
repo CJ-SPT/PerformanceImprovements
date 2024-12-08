@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Reflection;
 using EFT;
 using HarmonyLib;
+using PerformanceImprovements.Config;
 using PerformanceImprovements.Utils;
 using SPT.Reflection.Patching;
 using UnityEngine;
 
-namespace PerformanceImprovements.Patches;
+namespace PerformanceImprovements.Bots.Patches;
 
 public class BotStandByPatch : ModulePatch
 {
