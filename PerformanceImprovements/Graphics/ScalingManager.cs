@@ -13,6 +13,10 @@ public static class GraphicsUtils
     private static SharedGameSettingsClass _sharedGameSettings;
     private static FieldInfo SsaaImplField;
     
+    private static EDLSSMode _defaultDlssMode;
+    private static EFSR2Mode _defaultFsr2Mode;
+    private static EFSR3Mode _defaultRsr3Mode;
+    
     static GraphicsUtils()
     {
         _sharedGameSettings = Singleton<SharedGameSettingsClass>.Instance;
@@ -25,7 +29,7 @@ public static class GraphicsUtils
         {
             _sharedGameSettings = Singleton<SharedGameSettingsClass>.Instance;
         }
-
+        
         return _sharedGameSettings;
     }
     
@@ -83,7 +87,7 @@ public static class GraphicsUtils
         
         if (IsDlssEnabled() && GetDefaultDlssMode() != Settings.DlssMode.Value)
         {
-            camera.SetAntiAliasing(GetDefaultAAMode(), Settings.DlssMode.Value, GetDefaultFsr2Mode(), GetDefaultFsr3Mode());
+            camera.SetAntiAliasing(EAntialiasingMode.None, Settings.DlssMode.Value, EFSR2Mode.Off, EFSR3Mode.Off);
             return;
         }
 
@@ -111,23 +115,23 @@ public static class GraphicsUtils
             return;
         }
         
-        if (IsDlssEnabled() && GetDefaultDlssMode() != Settings.DlssMode.Value)
+        if (IsDlssEnabled())
         {
             camera.SetAntiAliasing(
-                GetDefaultAAMode(), GetDefaultDlssMode(), 
-                GetDefaultFsr2Mode(), GetDefaultFsr3Mode()
+                EAntialiasingMode.None, GetDefaultDlssMode(),
+                EFSR2Mode.Off, EFSR3Mode.Off
                 );
             
             return;
         }
         
-        if (IsFsr2Enabled() && GetDefaultFsr2Mode() != Settings.Fsr2Mode.Value)
+        if (IsFsr2Enabled())
         {
             camera.SetFSR2(GetDefaultFsr2Mode());
             return;
         }
 
-        if (IsFsr3Enabled() && GetDefaultFsr3Mode() != Settings.Fsr3Mode.Value)
+        if (IsFsr3Enabled())
         {
             camera.SetFSR3(GetDefaultFsr3Mode());
         }

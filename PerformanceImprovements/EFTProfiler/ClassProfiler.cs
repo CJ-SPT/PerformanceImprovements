@@ -81,7 +81,7 @@ public class ClassProfiler()
         
         File.WriteAllText(Path.Combine(AssemblyPath, $"{_currentTypeProfiling!.Name}_timings.json"), json);
         
-        Plugin.Log!.LogWarning("Analytics dumped to disk...");
+        Logger.Warn("Analytics dumped to disk...");
     }
 
     private void PatchAll()
@@ -93,7 +93,7 @@ public class ClassProfiler()
                 if (method.IsVirtual || !method.IsDeclaredMember() ||
                     method.IsGenericMethod) continue;
                 
-                Plugin.Log!.LogDebug($"Patching method {method.Name}");
+                Logger.Debug($"Patching method {method.Name}");
                 
                 var harmonyPrefix =
                     new HarmonyMethod(AccessTools.Method(typeof(ProfilerPatch), nameof(ProfilerPatch.Prefix)));
@@ -105,7 +105,7 @@ public class ClassProfiler()
         }
         catch (Exception e)
         {
-            Plugin.Log!.LogFatal(e);
+            Logger.Fatal(e.Message);
             throw;
         }
     }
@@ -154,10 +154,10 @@ public class ClassProfiler()
             switch (milliseconds)
             {
                 case > 5 and < 10:
-                    Plugin.Log!.LogWarning($"{methodString} took {milliseconds} ms");
+                    Logger.Warn($"{methodString} took {milliseconds} ms");
                     break;
                 case > 10:
-                    Plugin.Log!.LogError($"{methodString} took {milliseconds} ms");
+                    Logger.Error($"{methodString} took {milliseconds} ms");
                     break;
             }
         }

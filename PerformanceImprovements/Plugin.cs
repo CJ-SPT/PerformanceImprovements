@@ -25,7 +25,6 @@ public class Plugin : BaseUnityPlugin
     private static bool _isQuestingBotsPresent;
     internal static bool DisableBotLimiter => _isFikaPresent || _isQuestingBotsPresent;
     
-    [CanBeNull] internal static ManualLogSource Log;
     [CanBeNull] internal static ClassProfiler Profiler;
 
     internal static GameObject HookObject;
@@ -36,15 +35,13 @@ public class Plugin : BaseUnityPlugin
         {
             throw new Exception("Invalid EFT Version");
         }
-
-        Log = Logger;
-
+        
         _isFikaPresent = Chainloader.PluginInfos.Keys.Contains("com.fika.core");
         _isQuestingBotsPresent = Chainloader.PluginInfos.Keys.Contains("com.DanW.QuestingBots");
 
         if (_isFikaPresent || _isQuestingBotsPresent)
         {
-            Log.LogWarning("Mods with compatible features detected, disabling features.");
+            Utils.Logger.Warn("Mods with compatible features detected, disabling features.");
         }
         
         HookObject = new GameObject();

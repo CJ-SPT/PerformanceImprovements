@@ -6,6 +6,7 @@ using PerformanceImprovements.Config;
 using PerformanceImprovements.Models;
 using PerformanceImprovements.Utils;
 using UnityEngine;
+using Logger = PerformanceImprovements.Utils.Logger;
 
 namespace PerformanceImprovements.Core;
 
@@ -45,7 +46,7 @@ public class SceneCleaner : MonoBehaviour
                 // Cleaner is enabled
                 if (Settings.EnableSceneCleaner.Value)
                 {
-                    Plugin.Log!.LogError("Disabling SceneObjects");
+                    Logger.Error("Disabling SceneObjects");
 
                     StartCoroutine(IterateGameObjects(false));
 
@@ -58,7 +59,7 @@ public class SceneCleaner : MonoBehaviour
                 // Cleaner is not enabled
                 if (!Settings.EnableSceneCleaner.Value)
                 {
-                    Plugin.Log!.LogError("Enabling SceneObjects");
+                    Logger.Error("Enabling SceneObjects");
                     
                     StartCoroutine(IterateGameObjects(true));
                     
@@ -70,7 +71,7 @@ public class SceneCleaner : MonoBehaviour
     
     private IEnumerator IterateGameObjects(bool setActive)
     {
-        Plugin.Log!.LogInfo($"Iterating scene objects: {AllSceneObjects.Count}");
+        Logger.Info($"Iterating scene objects: {AllSceneObjects.Count}");
         
         foreach (var obj in AllSceneObjects.ToArray())
         {
@@ -106,7 +107,7 @@ public class SceneCleaner : MonoBehaviour
         
         var collect = objectNames.Any(s => obj.name.ToLower().Contains(s));
         
-        if (collect) Plugin.Log?.LogInfo($"Collecting object: {obj.name}");
+        if (collect) Logger.Info($"Collecting object: {obj.name}");
         
         return collect;
     }
