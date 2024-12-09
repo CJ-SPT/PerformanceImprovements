@@ -81,7 +81,7 @@ public static class Settings
         ConfigEntries.Add(UseExperimentalPatches = config.Bind(
             GeneralSection,
             "Use Experimental Patches(Requires Restart)",
-            true,
+            false,
             new ConfigDescription(
                 "Enables or disables the use of experimental patches. Requires a restart. " +
                 "These range from logic optimizations to threading optimizations. ",
