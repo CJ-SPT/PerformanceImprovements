@@ -7,6 +7,7 @@ using BepInEx.Logging;
 using JetBrains.Annotations;
 using PerformanceImprovements.Config;
 using PerformanceImprovements.EFTProfiler;
+using PerformanceImprovements.Graphics;
 using PerformanceImprovements.Threading;
 using PerformanceImprovements.Utils;
 using UnityEngine;
@@ -41,6 +42,8 @@ public class Plugin : BaseUnityPlugin
         }
 
         Log = Logger;
+        
+        GraphicSettingsManager.LoadSettings();
         
         IsFikaPresent = Chainloader.PluginInfos.Keys.Contains("com.fika.core");
         IsSainPresent = Chainloader.PluginInfos.Keys.Contains("me.sol.sain");

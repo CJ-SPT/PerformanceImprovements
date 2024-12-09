@@ -2,5 +2,11 @@
   "ESamplingMode/DownX09": "0.9x downsampling",
   "ESamplingMode/DownX08": "0.8x downsampling",
   "ESamplingMode/DownX07": "0.7x downsampling",
-  "ESamplingMode/DownX06": "0.6x downsampling"
+  "ESamplingMode/DownX06": "0.6x downsampling",
+  "Settings/Graphics/ShadowResolution": "Shadow Resolution",
+  "Settings/Graphics/ShadowResolutionTooltip": "The default resolution of the shadow maps.",
+  "ShadowResolution/Low": "Low",
+  "ShadowResolution/Medium": "Medium",
+  "ShadowResolution/High": "High",
+  "ShadowResolution/VeryHigh": "Very High"
 }
