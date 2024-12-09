@@ -83,7 +83,8 @@ public static class Settings
             "Use Experimental Patches(Requires Restart)",
             true,
             new ConfigDescription(
-                "Enables or disables the use of experimental patches. Requires a restart. These range from logic optimizations to threading optimizations.",
+                "Enables or disables the use of experimental patches. Requires a restart. " +
+                "These range from logic optimizations to threading optimizations. ",
                 null,
                 new ConfigurationManagerAttributes { })));
     }
