@@ -19,6 +19,9 @@ public static class Settings
     private const string GeneralSection = "General";
     public static ConfigEntry<bool> UseExperimentalPatches;
     
+    private const string GraphicsSection = "Graphics";
+    public static ConfigEntry<bool> EnableGraphics;
+    
     private const string BotLimitSection = "Bot Limiter";
     public static ConfigEntry<bool> EnableBotLimiter;
     public static ConfigEntry<bool> DisableScavs;
@@ -69,13 +72,15 @@ public static class Settings
         // BindSceneCleanerOptions(config);
         
         RecalcOrder();
+        
+        config.SettingChanged += OnConfigUpdated;
     }
 
     private static void BindGeneral(ConfigFile config)
     {
         ConfigEntries.Add(UseExperimentalPatches = config.Bind(
             GeneralSection,
-            "Use Experimental Patches",
+            "Use Experimental Patches(Requires Restart)",
             true,
             new ConfigDescription(
                 "Enables or disables the use of experimental patches. Requires a restart. These range from logic optimizations to threading optimizations.",
@@ -83,6 +88,18 @@ public static class Settings
                 new ConfigurationManagerAttributes { })));
     }
 
+    private static void BindGraphics(ConfigFile config)
+    {
+        ConfigEntries.Add(UseExperimentalPatches = config.Bind(
+            GraphicsSection,
+            "Enable Graphics Settings",
+            true,
+            new ConfigDescription(
+                "Enable this section",
+                null,
+                new ConfigurationManagerAttributes { })));
+    }
+    
     private static void BindBotLimiter(ConfigFile config)
     {
         ConfigEntries.Add(EnableBotLimiter = config.Bind(
@@ -363,6 +380,11 @@ public static class Settings
         }
     }
 
+    private static void OnConfigUpdated(object sender, SettingChangedEventArgs e)
+    {
+        
+    }
+    
     public static CleanUpNameModel GetCleanUpNamesJson()
     {
         var assembly = Assembly.GetExecutingAssembly();
