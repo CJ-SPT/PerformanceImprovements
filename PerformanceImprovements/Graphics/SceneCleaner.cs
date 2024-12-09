@@ -18,7 +18,7 @@ public class SceneCleaner : MonoBehaviour
     
     private void Awake()
     {
-        _cleanUpNameModel = Settings.GetCleanUpNamesJson();
+        _cleanUpNameModel = EmbededResourceUtil.GetCleanUpNamesJson();
     }
     
     private void Update()

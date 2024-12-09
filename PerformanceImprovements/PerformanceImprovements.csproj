@@ -109,6 +109,8 @@
 	<ItemGroup>
 	  <None Remove="json\CleanUpNames.json" />
 	  <EmbeddedResource Include="json\CleanUpNames.json" />
+	  <None Remove="json\Localization.json" />
+	  <EmbeddedResource Include="json\Localization.json" />
 	</ItemGroup>
 	
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">

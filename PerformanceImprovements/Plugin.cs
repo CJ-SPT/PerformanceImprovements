@@ -14,7 +14,7 @@ using Logger = PerformanceImprovements.Utils.Logger;
 
 namespace PerformanceImprovements;
 
-[BepInPlugin("com.dirtbikercj.performanceImprovements", "Performance Improvements", "0.1.5")]
+[BepInPlugin("com.dirtbikercj.performanceImprovements", "Performance Improvements", "0.2.0")]
 [BepInDependency("com.Arys.UnityToolkit")]
 [BepInDependency("com.fika.core", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency("me.sol.sain", BepInDependency.DependencyFlags.SoftDependency)] 

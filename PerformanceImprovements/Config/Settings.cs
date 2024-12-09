@@ -385,17 +385,4 @@ public static class Settings
     {
         
     }
-    
-    public static CleanUpNameModel GetCleanUpNamesJson()
-    {
-        var assembly = Assembly.GetExecutingAssembly();
-        const string path = "PerformanceImprovements.json.CleanUpNames.json";
-
-        using var stream = assembly.GetManifestResourceStream(path);
-        using var reader = new StreamReader(stream!);
-        
-        var json = reader.ReadToEnd();
-        
-        return JsonConvert.DeserializeObject<CleanUpNameModel>(json);
-    }
 }
