@@ -23,7 +23,7 @@ public static class Settings
     public static ConfigEntry<bool> EnableGraphics;
     
     private const string BotLimitSection = "Bot Limiter";
-    public static ConfigEntry<bool> EnableBotLimiter;
+    public static ConfigEntry<bool> EnableBotRangeLimiter;
     public static ConfigEntry<bool> DisableScavs;
     public static ConfigEntry<bool> DisablePmcs;
     public static ConfigEntry<bool> DisableBosses;
@@ -63,7 +63,7 @@ public static class Settings
         BindGeneral(config);
         
         // Disable the bot limiter if incompatible plugins are found.
-        if (!Plugin.DisableBotLimiter)
+        if (!Plugin.DisableBotManagement)
         { 
             BindBotLimiter(config);
         }
@@ -103,7 +103,7 @@ public static class Settings
     
     private static void BindBotLimiter(ConfigFile config)
     {
-        ConfigEntries.Add(EnableBotLimiter = config.Bind(
+        ConfigEntries.Add(EnableBotRangeLimiter = config.Bind(
             BotLimitSection,
             "Enable Bot Distance Limiter",
             true,
@@ -229,7 +229,7 @@ public static class Settings
                 new AcceptableValueRange<int>(125, 1000),
                 new ConfigurationManagerAttributes { })));
     }
-
+    
     private static void BindScopeResolutionOptions(ConfigFile config)
     {
         ConfigEntries.Add(EnableScopeResolutionMod = config.Bind(

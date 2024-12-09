@@ -54,3 +54,7 @@ public class DisablePatchAttribute : Attribute
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class ExperimentalPatchAttribute : Attribute
 { }
+
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+public class FikaDisablePatchAttribute : Attribute
+{ }

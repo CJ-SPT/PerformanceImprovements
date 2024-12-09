@@ -14,17 +14,19 @@ using Logger = PerformanceImprovements.Utils.Logger;
 
 namespace PerformanceImprovements;
 
-[BepInPlugin("com.dirtbikercj.performanceImprovements", "Performance Improvements", "0.1.4")]
+[BepInPlugin("com.dirtbikercj.performanceImprovements", "Performance Improvements", "0.1.5")]
 [BepInDependency("com.Arys.UnityToolkit")]
-[BepInDependency("com.fika.core", BepInDependency.DependencyFlags.SoftDependency)] // Used to disable the bot limiter
-[BepInDependency("com.DanW.QuestingBots", BepInDependency.DependencyFlags.SoftDependency)] // Used to disable the bot limiter
+[BepInDependency("com.fika.core", BepInDependency.DependencyFlags.SoftDependency)]
+[BepInDependency("me.sol.sain", BepInDependency.DependencyFlags.SoftDependency)] 
+[BepInDependency("com.DanW.QuestingBots", BepInDependency.DependencyFlags.SoftDependency)]
 public class Plugin : BaseUnityPlugin
 {
     public const int TarkovVersion = 33420;
     
-    private static bool _isFikaPresent;
-    private static bool _isQuestingBotsPresent;
-    internal static bool DisableBotLimiter => _isFikaPresent || _isQuestingBotsPresent;
+    public static bool IsFikaPresent { get; private set; }
+    public static bool IsSainPresent { get; private set; }
+    public static bool IsQuestingBotsPresent { get; private set; }
+    internal static bool DisableBotManagement => IsFikaPresent || IsQuestingBotsPresent;
     
     [CanBeNull] internal static ClassProfiler Profiler;
 
@@ -40,10 +42,11 @@ public class Plugin : BaseUnityPlugin
 
         Log = Logger;
         
-        _isFikaPresent = Chainloader.PluginInfos.Keys.Contains("com.fika.core");
-        _isQuestingBotsPresent = Chainloader.PluginInfos.Keys.Contains("com.DanW.QuestingBots");
+        IsFikaPresent = Chainloader.PluginInfos.Keys.Contains("com.fika.core");
+        IsSainPresent = Chainloader.PluginInfos.Keys.Contains("me.sol.sain");
+        IsQuestingBotsPresent = Chainloader.PluginInfos.Keys.Contains("com.DanW.QuestingBots");
 
-        if (_isFikaPresent || _isQuestingBotsPresent)
+        if (IsFikaPresent || IsQuestingBotsPresent)
         {
             Utils.Logger.Warn("Mods with compatible features detected, disabling features.");
         }
