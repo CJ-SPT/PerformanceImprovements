@@ -25,7 +25,7 @@ public static class GraphicSettingsManager
     {
         if (SettingsModel.ShadowResolution == resolution) return;
         
-        Logger.Debug($"Setting Shadow Resolution: {resolution}");
+        // Logger.Debug($"Setting Shadow Resolution: {resolution}");
         SettingsModel.ShadowResolution = resolution;
         
         SaveSettings();
@@ -35,7 +35,7 @@ public static class GraphicSettingsManager
     {
         if (SettingsModel.ShadowCascades == cascades) return;
         
-        Logger.Debug($"Setting Shadow Cascades: {cascades}");
+        // Logger.Debug($"Setting Shadow Cascades: {cascades}");
         SettingsModel.ShadowCascades = cascades;
         
         SaveSettings();
