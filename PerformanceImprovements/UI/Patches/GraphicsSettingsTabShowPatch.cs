@@ -2,11 +2,12 @@
 using Bsg.GameSettings;
 using EFT.UI.Settings;
 using HarmonyLib;
+using PerformanceImprovements.Graphics;
 using PerformanceImprovements.Models;
 using SPT.Reflection.Patching;
 using UnityEngine;
 
-namespace PerformanceImprovements.Graphics.Patches;
+namespace PerformanceImprovements.UI.Patches;
 
 public class GraphicsSettingsTabShowPatch : ModulePatch
 {

@@ -15,8 +15,9 @@ public static class PerformancePrepatcher
     {
         try
         {
+            PatchNewSettingsTabs(ref assembly);
             PatchNewSampleModes(ref assembly);
-
+            
             Logger.CreateLogSource("Performance Patch").LogInfo("Patching Complete!");
         }
         catch (Exception ex)
@@ -112,5 +113,23 @@ public static class PerformancePrepatcher
         
         sampleEnum.Fields.Add(super2);
         sampleEnum.Fields.Add(super4);
+    }
+    
+    private static void PatchNewSettingsTabs(ref AssemblyDefinition assembly)
+    {
+        var settingsEnum = assembly.MainModule.Types
+            .First(t => t.NestedTypes.Any(nt => nt.Name == "ESettingsGroup"))
+            .NestedTypes.First(t => t.Name == "ESettingsGroup");
+        
+        Logger.CreateLogSource("Performance Patch").LogInfo(settingsEnum.FullName);
+        
+        var index = 5;
+        
+        var perfImprovements = CreateNewEnum(
+            "PerformanceImprovements",
+            settingsEnum,
+            index++);
+        
+        settingsEnum.Fields.Add(perfImprovements);
     }
 }
