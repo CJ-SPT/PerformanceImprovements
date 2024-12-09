@@ -23,5 +23,10 @@ public class EnvironmentManagerUpdatePatch : ModulePatch
         {
             QualitySettings.shadowResolution = Settings.ShadowResolution;
         }
+
+        if (QualitySettings.shadowCascades != GraphicSettingsManager.GetShadowCascadesCount())
+        {
+            QualitySettings.shadowCascades = GraphicSettingsManager.GetShadowCascadesCount();
+        }
     }
 }

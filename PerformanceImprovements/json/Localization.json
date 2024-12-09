@@ -8,5 +8,10 @@
   "ShadowResolution/Low": "Low",
   "ShadowResolution/Medium": "Medium",
   "ShadowResolution/High": "High",
-  "ShadowResolution/VeryHigh": "Very High"
+  "ShadowResolution/VeryHigh": "Very High",
+  "Settings/Graphics/ShadowCascade": "Shadow Cascades",
+  "Settings/Graphics/ShadowCascadeTooltip": "A higher number of cascades gives better quality but at the expense of processing overhead.",
+  "ShadowCascades/None": "None",
+  "ShadowCascades/Two": "Two",
+  "ShadowCascades/Four": "Four"
 }

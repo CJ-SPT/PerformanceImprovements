@@ -30,14 +30,39 @@ public static class GraphicSettingsManager
         
         SaveSettings();
     }
+    
+    public static void ShadowCascadeSettingChanged(ShadowCascades cascades)
+    {
+        if (SettingsModel.ShadowCascades == cascades) return;
+        
+        Logger.Debug($"Setting Shadow Cascades: {cascades}");
+        SettingsModel.ShadowCascades = cascades;
+        
+        SaveSettings();
+    }
 
+    public static int GetShadowCascadesCount()
+    {
+        switch (SettingsModel.ShadowCascades)
+        {
+            case ShadowCascades.None:
+                return 0;
+            case ShadowCascades.Two:
+                return 2;
+            case ShadowCascades.Four:
+                return 4;
+            default:
+                return 2;
+        }
+    }
+    
     public static void LoadSettings()
     {
         if (!File.Exists(_settingsPath))
         {
             Logger.Warn("Settings file not found, creating default settings.");
             
-            SettingsModel = new SettingsModel();
+            SettingsModel = SettingsModel.CreateDefault();
             
             var str = JsonConvert.SerializeObject(SettingsModel, Formatting.Indented);
             File.WriteAllText(_settingsPath, str);

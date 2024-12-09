@@ -2,6 +2,7 @@
 using Bsg.GameSettings;
 using EFT.UI.Settings;
 using HarmonyLib;
+using PerformanceImprovements.Models;
 using SPT.Reflection.Patching;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace PerformanceImprovements.Graphics.Patches;
 public class GraphicsSettingsTabShowPatch : ModulePatch
 {
     private static GameSetting<ShadowResolution> _shadowDistance;
+    private static GameSetting<ShadowCascades> _shadowCascadeMode;
     
     protected override MethodBase GetTargetMethod()
     {
@@ -50,5 +52,13 @@ public class GraphicsSettingsTabShowPatch : ModulePatch
         shadowDistDropdown.BindToEnum(_shadowDistance);
 
         _shadowDistance.Bind(GraphicSettingsManager.ShadowResolutionSettingChanged);
+        
+        var shadowCascadeDropdown = settingsTab.CreateControl(prefab, parent); 
+        shadowCascadeDropdown.GetOrCreateTooltip().SetMessageText("Settings/Graphics/ShadowCascadeTooltip");
+        shadowCascadeDropdown.transform.SetSiblingIndex(index + 2);
+        _shadowCascadeMode = tmpSettings.method_4("Settings/Graphics/ShadowCascade", graphicsSettings.ShadowCascades);
+        shadowCascadeDropdown.BindToEnum(_shadowCascadeMode);
+        
+        _shadowCascadeMode.Bind(GraphicSettingsManager.ShadowCascadeSettingChanged);
     }
 }
