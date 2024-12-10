@@ -60,7 +60,7 @@ internal class BotStandByUpdatePatch : ModulePatch
         // Bot has first-aid to do or is in combat, let them do it, add 30 seconds
         if (___botOwner_0.Medecine.FirstAid.Have2Do || ___botOwner_0.Memory.HaveEnemy)
         {
-            Logger.LogWarning($"{___botOwner_0.Profile.Nickname} needs medical or is in combat");
+            //Logger.LogWarning($"{___botOwner_0.Profile.Nickname} needs medical or is in combat");
             
             if (__instance.StandByType != BotStandByType.active)
             {
@@ -76,7 +76,7 @@ internal class BotStandByUpdatePatch : ModulePatch
         {
             if (__instance.StandByType != BotStandByType.active)
             {
-                Logger.LogWarning($"{___botOwner_0.Profile.Nickname} Enable Reason: Over SleepingOwners Count");
+                //Logger.LogWarning($"{___botOwner_0.Profile.Nickname} Enable Reason: Over SleepingOwners Count");
                 EnableBot(___botOwner_0, __instance);
             }
             
@@ -89,7 +89,7 @@ internal class BotStandByUpdatePatch : ModulePatch
         {
             if (__instance.StandByType != BotStandByType.active)
             {
-                Logger.LogWarning($"{___botOwner_0.Profile.Nickname} Enable Reason: To Close to player");
+                //Logger.LogWarning($"{___botOwner_0.Profile.Nickname} Enable Reason: To Close to player");
                 EnableBot(___botOwner_0, __instance);
             }
             
@@ -102,7 +102,7 @@ internal class BotStandByUpdatePatch : ModulePatch
         {
             if (___standByType != BotStandByType.paused)
             {
-                Logger.LogWarning($"{___botOwner_0.Profile.Nickname} Disable Reason: General StandBy");
+                //Logger.LogWarning($"{___botOwner_0.Profile.Nickname} Disable Reason: General StandBy");
                 DisableBot(___botOwner_0, __instance);
             }
             
@@ -166,7 +166,7 @@ internal class BotStandByUpdatePatch : ModulePatch
 
     private static void DisableBot(BotOwner owner, BotStandBy standBy)
     {
-        Utils.Logger.Warn($"Disabled Bot ({owner.Profile.Nickname})");
+        //Utils.Logger.Warn($"Disabled Bot ({owner.Profile.Nickname})");
         
         standBy.StandByType = BotStandByType.paused;
         SleepingOwners.Add(owner);
@@ -174,7 +174,7 @@ internal class BotStandByUpdatePatch : ModulePatch
 
     private static void EnableBot(BotOwner owner, BotStandBy standBy)
     {
-        Utils.Logger.Warn($"Enabled Bot ({owner.Profile.Nickname})");
+        //Utils.Logger.Warn($"Enabled Bot ({owner.Profile.Nickname})");
         
         standBy.StandByType = BotStandByType.active;
         SleepingOwners.Remove(owner);
