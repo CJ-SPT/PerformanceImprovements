@@ -33,7 +33,7 @@ public static class GraphicSettingsManager
     
     public static void ShadowCascadeSettingChanged(ShadowCascades cascades)
     {
-        if (SettingsModel.ShadowCascades == cascades) return;
+        if (SettingsModel.ShadowCascades == cascades || cascades == ShadowCascades.None) return;
         
         // Logger.Debug($"Setting Shadow Cascades: {cascades}");
         SettingsModel.ShadowCascades = cascades;
@@ -45,8 +45,8 @@ public static class GraphicSettingsManager
     {
         switch (SettingsModel.ShadowCascades)
         {
-            case ShadowCascades.None:
-                return 0;
+            // case ShadowCascades.None:
+               // return 0;
             case ShadowCascades.Two:
                 return 2;
             case ShadowCascades.Four:
@@ -70,7 +70,13 @@ public static class GraphicSettingsManager
         }
         
         Logger.Info($"Loading graphics settings from: {_settingsPath}");
-        SettingsModel = JsonConvert.DeserializeObject<SettingsModel>(File.ReadAllText(_settingsPath));
+        SettingsModel = JsonConvert.DeserializeObject<SettingsModel>(File.ReadAllText(_settingsPath), new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
+        if (SettingsModel.ShadowCascades == ShadowCascades.None)
+        {
+            Logger.Warn("Fixing ShadowCascades to default.");
+            SettingsModel.ShadowCascades = ShadowCascades.Two;
+        }
     }
 
     private static void SaveSettings()
