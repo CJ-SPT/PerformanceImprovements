@@ -90,7 +90,7 @@ public class ClassProfiler()
         {
             foreach (var method in _currentTypeProfiling!.GetMethods())
             {
-                if (method.IsVirtual || !method.IsDeclaredMember() ||
+                if (!method.IsDeclaredMember() ||
                     method.IsGenericMethod) continue;
                 
                 Logger.Debug($"Patching method {method.Name}");

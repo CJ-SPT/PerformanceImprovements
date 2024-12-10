@@ -10,6 +10,7 @@ public class AnalyticsModel
     public double MinTime;
     public double MaxTime;
     public double AvgTime;
+    public int Count;
     
     [JsonIgnore]
     public readonly List<double> AllTimings = [];
@@ -19,5 +20,6 @@ public class AnalyticsModel
         MinTime = AllTimings.Min();
         MaxTime = AllTimings.Max();
         AvgTime = AllTimings.Sum() / AllTimings.Count;
+        Count = AllTimings.Count;
     }
 }
