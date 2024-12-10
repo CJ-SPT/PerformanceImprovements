@@ -9,13 +9,15 @@ using PerformanceImprovements.Config;
 using PerformanceImprovements.Utils;
 using SPT.Reflection.Patching;
 using UnityEngine;
+using Logger = PerformanceImprovements.Utils.Logger;
 
 namespace PerformanceImprovements.Bots.Patches;
 
-public class BotStandByPatch : ModulePatch
+internal class BotStandByUpdatePatch : ModulePatch
 {
     private static bool IsLimitEnabled => Settings.EnableBotRangeLimiter.Value;
     private static IBotGame BotGame => Singleton<IBotGame>.Instance;
+    public static List<BotOwner> SleepingOwners { get; } = [];
     
     private static readonly Dictionary<string, Func<int>> LocationLimitDistances = new()
     {
@@ -55,66 +57,143 @@ public class BotStandByPatch : ModulePatch
             return false;
         }
         
-        // Limit is enabled but the bot cannot be disabled
-        if (IsLimitEnabled && !CanBotBeDisabled(___botOwner_0.GetPlayer))
+        // Bot has first-aid to do or is in combat, let them do it, add 30 seconds
+        if (___botOwner_0.Medecine.FirstAid.Have2Do || ___botOwner_0.Memory.HaveEnemy)
         {
+            Logger.LogWarning($"{___botOwner_0.Profile.Nickname} needs medical or is in combat");
+            
+            if (__instance.StandByType != BotStandByType.active)
+            {
+                EnableBot(___botOwner_0, __instance);
+            }
+            
+            ____nextCheckTime = Time.time + 30f;
+            return false;
+        }
+
+        // We are over the cap allowed to disable bots
+        if (SleepingOwners.Count > Settings.MaxSleepingBots.Value)
+        {
+            if (__instance.StandByType != BotStandByType.active)
+            {
+                Logger.LogWarning($"{___botOwner_0.Profile.Nickname} Enable Reason: Over SleepingOwners Count");
+                EnableBot(___botOwner_0, __instance);
+            }
+            
             ____nextCheckTime = Time.time + 10f;
             return false;
         }
         
-        var mainPlayer = GameUtils.GetMainPlayer();
-        var trueDistance = Vector3.Distance(
-            ((IPlayer)___botOwner_0.GetPlayer).Position, 
-            ((IPlayer)mainPlayer).Position);
-
-        DisableBot(__instance, ___standByType, mainPlayer, trueDistance);
+        // Bot cannot be disabled, it is too close
+        if (!CanBeDisabledByDistance(___botOwner_0))
+        {
+            if (__instance.StandByType != BotStandByType.active)
+            {
+                Logger.LogWarning($"{___botOwner_0.Profile.Nickname} Enable Reason: To Close to player");
+                EnableBot(___botOwner_0, __instance);
+            }
+            
+            ____nextCheckTime = Time.time + 10f;
+            return false;
+        }
         
-        ____nextCheckTime = Time.time + 10f;
+        // Bot can be put to sleep
+        if (CanBeDisabledByCount() && CanBotSideBeDisabled(___botOwner_0.GetPlayer) && CanBeDisabledByDistance(___botOwner_0))
+        {
+            if (___standByType != BotStandByType.paused)
+            {
+                Logger.LogWarning($"{___botOwner_0.Profile.Nickname} Disable Reason: General StandBy");
+                DisableBot(___botOwner_0, __instance);
+            }
+            
+            ____nextCheckTime = Time.time + 10f;
+        }
+        
         return false;
     }
     
-    private static bool CanBotBeDisabled(Player player)
+    private static bool CanBotSideBeDisabled(Player bot)
     {
-        if (player.Side == EPlayerSide.Savage)
+        if (bot.Side == EPlayerSide.Savage)
         {
             // Scavs
-            if (Settings.DisableScavs.Value && !GameUtils.Bosses.Contains(player.Profile.Info.Settings.Role))
+            if (Settings.DisableScavs.Value && !GameUtils.Bosses.Contains(bot.Profile.Info.Settings.Role))
             {
                 return true;
             }
             
             // Bosses
-            if (Settings.DisableBosses.Value && GameUtils.Bosses.Contains(player.Profile.Info.Settings.Role))
+            if (Settings.DisableBosses.Value && GameUtils.Bosses.Contains(bot.Profile.Info.Settings.Role))
             {
                 return true;
             }
         }
         
         // Pmcs
-        if ((player.Side == EPlayerSide.Bear || player.Side == EPlayerSide.Usec) && Settings.DisablePmcs.Value)
+        if ((bot.Side == EPlayerSide.Bear || bot.Side == EPlayerSide.Usec) && Settings.DisablePmcs.Value)
         {
             return true;
         }
         
         return false;
     }
-
-    private static void DisableBot(BotStandBy standBy, BotStandByType standByType, Player mainPlayer, float distance)
+    
+    private static bool CanBeDisabledByCount()
     {
+        return SleepingOwners.Count < Settings.MaxSleepingBots.Value;
+    }
+    
+    private static bool CanBeDisabledByDistance(BotOwner owner)
+    {
+        var mainPlayer = GameUtils.GetMainPlayer();
+        
         var disableDistance = LocationLimitDistances[mainPlayer.Location]();
         var enableDistance = disableDistance - 25;
         
-        // Enable the bot
-        if (distance < enableDistance && standByType == BotStandByType.paused)
+        var trueDistance = Vector3.Distance(
+            ((IPlayer)owner.GetPlayer).Position, 
+            ((IPlayer)mainPlayer).Position);
+        
+        // Bot is closer than the enable difference and is disabled
+        if (trueDistance < enableDistance)
         {
-            standBy.StandByType = BotStandByType.active;
-            return;
+            return false;
         }
         
-        // Disable the bot
-        if (distance > disableDistance && standByType == BotStandByType.active)
+        // Bot is outside the disable radius and is enabled
+        return trueDistance > disableDistance;
+    }
+
+    private static void DisableBot(BotOwner owner, BotStandBy standBy)
+    {
+        Utils.Logger.Warn($"Disabled Bot ({owner.Profile.Nickname})");
+        
+        standBy.StandByType = BotStandByType.paused;
+        SleepingOwners.Add(owner);
+    }
+
+    private static void EnableBot(BotOwner owner, BotStandBy standBy)
+    {
+        Utils.Logger.Warn($"Enabled Bot ({owner.Profile.Nickname})");
+        
+        standBy.StandByType = BotStandByType.active;
+        SleepingOwners.Remove(owner);
+    }
+}
+
+internal class BotStandByActivatePatch : ModulePatch
+{
+    protected override MethodBase GetTargetMethod()
+    {
+        return AccessTools.Method(typeof(BotStandBy), nameof(BotStandBy.Activate));
+    }
+
+    [PatchPostfix]
+    public static void PatchPostfix(BotStandBy __instance, BotOwner ___botOwner_0)
+    {
+        if (__instance.StandByType == BotStandByType.active)
         {
-            standBy.StandByType = BotStandByType.paused;
+            BotStandByUpdatePatch.SleepingOwners.Remove(___botOwner_0);
         }
     }
 }

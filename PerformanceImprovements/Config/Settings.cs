@@ -24,6 +24,7 @@ public static class Settings
     
     private const string BotLimitSection = "Bot Limiter";
     public static ConfigEntry<bool> EnableBotRangeLimiter;
+    public static ConfigEntry<int> MaxSleepingBots;
     public static ConfigEntry<bool> DisableScavs;
     public static ConfigEntry<bool> DisablePmcs;
     public static ConfigEntry<bool> DisableBosses;
@@ -110,6 +111,15 @@ public static class Settings
             new ConfigDescription(
                 "Deactivates bots that are a set distance away from you.",
                 null,
+                new ConfigurationManagerAttributes { })));
+        
+        ConfigEntries.Add(MaxSleepingBots = config.Bind(
+            BotLimitSection,
+            "Max Sleeping Bots Count",
+            16,
+            new ConfigDescription(
+                "Caps the amount of bots that can be asleep (Higher is better performance)",
+                new AcceptableValueRange<int>(1, 50),
                 new ConfigurationManagerAttributes { })));
         
         ConfigEntries.Add(DisableScavs = config.Bind(

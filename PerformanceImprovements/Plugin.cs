@@ -51,7 +51,7 @@ public class Plugin : BaseUnityPlugin
 
         if (IsFikaPresent || IsQuestingBotsPresent)
         {
-            Utils.Logger.Warn("Mods with compatible features detected, disabling features.");
+            Utils.Logger.Warn("Mods with incompatible features detected, disabling features.");
         }
         
         HookObject = new GameObject();
