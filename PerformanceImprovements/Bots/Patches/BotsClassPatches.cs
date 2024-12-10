@@ -6,6 +6,9 @@ using SPT.Reflection.Patching;
 
 namespace PerformanceImprovements.Bots.Patches;
 
+/// <summary>
+/// Prevents the allocation of a delegate
+/// </summary>
 public class BotsClassGetEnemiesPatch : ModulePatch
 {
     protected override MethodBase GetTargetMethod()

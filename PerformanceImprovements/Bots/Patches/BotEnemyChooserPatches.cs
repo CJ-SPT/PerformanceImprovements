@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
 using EFT;
 using HarmonyLib;
@@ -7,6 +6,9 @@ using SPT.Reflection.Patching;
 
 namespace PerformanceImprovements.Bots.Patches;
 
+/// <summary>
+/// Gets rid of a bunch of logging allocations
+/// </summary>
 public class BotEnemyChooserBetterEnemyPatch : ModulePatch
 {
     protected override MethodBase GetTargetMethod()
