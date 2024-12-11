@@ -5,6 +5,7 @@ using System.Linq;
 using BepInEx.Bootstrap;
 using BepInEx.Logging;
 using JetBrains.Annotations;
+using PerformanceImprovements.Bots;
 using PerformanceImprovements.Config;
 using PerformanceImprovements.EFTProfiler;
 using PerformanceImprovements.Graphics;
@@ -18,8 +19,9 @@ namespace PerformanceImprovements;
 [BepInPlugin("com.dirtbikercj.performanceImprovements", "Performance Improvements", "0.2.1")]
 [BepInDependency("com.Arys.UnityToolkit")]
 [BepInDependency("com.fika.core", BepInDependency.DependencyFlags.SoftDependency)]
-[BepInDependency("me.sol.sain", BepInDependency.DependencyFlags.SoftDependency)] 
+[BepInDependency("me.sol.sain", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency("com.DanW.QuestingBots", BepInDependency.DependencyFlags.SoftDependency)]
+[BepInDependency("xyz.drakia.bigbrain")]
 public class Plugin : BaseUnityPlugin
 {
     public const int TarkovVersion = 33420;
@@ -44,6 +46,8 @@ public class Plugin : BaseUnityPlugin
         Log = Logger;
         
         GraphicSettingsManager.LoadSettings();
+        
+        LayerManager.AddLayers();
         
         IsFikaPresent = Chainloader.PluginInfos.Keys.Contains("com.fika.core");
         IsSainPresent = Chainloader.PluginInfos.Keys.Contains("me.sol.sain");
