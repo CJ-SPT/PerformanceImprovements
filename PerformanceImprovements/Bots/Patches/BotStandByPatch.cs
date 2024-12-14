@@ -116,7 +116,9 @@ internal class BotStandByUpdatePatch : ModulePatch
         if (bot.Side == EPlayerSide.Savage)
         {
             // Scavs
-            if (Settings.DisableScavs.Value && !GameUtils.Bosses.Contains(bot.Profile.Info.Settings.Role))
+            if (Settings.DisableScavs.Value &&
+                bot.Profile.Info.Settings.Role != WildSpawnType.marksman &&
+                !GameUtils.Bosses.Contains(bot.Profile.Info.Settings.Role))
             {
                 return true;
             }
