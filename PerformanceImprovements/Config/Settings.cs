@@ -100,7 +100,7 @@ public static class Settings
             "Enable Experimental Graphic Settings",
             true,
             new ConfigDescription(
-                "Enables experimental graphic settings in the EFT graphics settings page.",
+                "Enables experimental graphic settings in the EFT graphics settings page. (REQUIRES RESTART)",
                 null,
                 new ConfigurationManagerAttributes { })));
     }
@@ -130,7 +130,7 @@ public static class Settings
             "Enable Culling of bots",
             true,
             new ConfigDescription(
-                "Enables culling of bots. It will only cull disabled bots",
+                "Enables culling of bots. It will only cull disabled bots (EXPERIMENTAL)",
                 null,
                 new ConfigurationManagerAttributes { })));
         

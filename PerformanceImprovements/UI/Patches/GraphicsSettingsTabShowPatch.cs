@@ -2,6 +2,7 @@
 using Bsg.GameSettings;
 using EFT.UI.Settings;
 using HarmonyLib;
+using PerformanceImprovements.Config;
 using PerformanceImprovements.Graphics;
 using PerformanceImprovements.Models;
 using SPT.Reflection.Patching;
@@ -27,6 +28,7 @@ public class GraphicsSettingsTabShowPatch : ModulePatch
         SettingDropDown ____shadowsQuality,
         GClass1039 ____tempSettings)
     {
+        if (!Settings.EnableShadowSettings.Value) return;
         
         var startingIndex = ____shadowsQuality.transform.parent.GetSiblingIndex();
         
