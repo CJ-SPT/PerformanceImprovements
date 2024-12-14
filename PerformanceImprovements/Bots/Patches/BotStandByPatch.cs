@@ -121,6 +121,12 @@ internal class BotStandByUpdatePatch : ModulePatch
                 return true;
             }
             
+            // Snipers
+            if (Settings.DisableSniperScavs.Value && bot.Profile.Info.Settings.Role == WildSpawnType.marksman)
+            {
+                return true;
+            }
+            
             // Bosses
             if (Settings.DisableBosses.Value && GameUtils.Bosses.Contains(bot.Profile.Info.Settings.Role))
             {

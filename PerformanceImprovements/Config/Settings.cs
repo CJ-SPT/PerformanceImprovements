@@ -21,12 +21,13 @@ public static class Settings
     
     private const string GraphicsSection = "Graphics";
     public static ConfigEntry<bool> EnableShadowSettings;
-    public static ConfigEntry<bool> EnableBotCulling;
     
     private const string BotLimitSection = "Bot Limiter";
     public static ConfigEntry<bool> EnableBotRangeLimiter;
+    public static ConfigEntry<bool> EnableBotCulling;
     public static ConfigEntry<int> MaxSleepingBots;
     public static ConfigEntry<bool> DisableScavs;
+    public static ConfigEntry<bool> DisableSniperScavs;
     public static ConfigEntry<bool> DisablePmcs;
     public static ConfigEntry<bool> DisableBosses;
     public static ConfigEntry<int> FactoryDisableDistance;
@@ -139,6 +140,15 @@ public static class Settings
             true,
             new ConfigDescription(
                 "Should scavs be disabled?",
+                null,
+                new ConfigurationManagerAttributes { })));
+        
+        ConfigEntries.Add(DisableSniperScavs = config.Bind(
+            BotLimitSection,
+            "Limit Sniper Scavs",
+            true,
+            new ConfigDescription(
+                "Should snipers be disabled?",
                 null,
                 new ConfigurationManagerAttributes { })));
         
