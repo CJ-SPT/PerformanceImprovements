@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using BepInEx.Bootstrap;
 using BepInEx.Logging;
+using CTap;
 using JetBrains.Annotations;
 using PerformanceImprovements.Config;
 using PerformanceImprovements.EFTProfiler;
@@ -14,7 +15,7 @@ using UnityEngine;
 
 namespace PerformanceImprovements;
 
-[BepInPlugin("com.dirtbikercj.performanceImprovements", "Performance Improvements", "0.2.1")]
+[BepInPlugin("com.dirtbikercj.performanceImprovements", "Performance Improvements", BuildInfo.Version)]
 [BepInDependency("com.Arys.UnityToolkit")]
 [BepInDependency("com.fika.core", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency("me.sol.sain", BepInDependency.DependencyFlags.SoftDependency)]
