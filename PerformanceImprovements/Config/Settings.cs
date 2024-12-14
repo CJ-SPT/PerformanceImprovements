@@ -20,7 +20,8 @@ public static class Settings
     public static ConfigEntry<bool> UseExperimentalPatches;
     
     private const string GraphicsSection = "Graphics";
-    public static ConfigEntry<bool> EnableGraphics;
+    public static ConfigEntry<bool> EnableShadowSettings;
+    public static ConfigEntry<bool> EnableBotCulling;
     
     private const string BotLimitSection = "Bot Limiter";
     public static ConfigEntry<bool> EnableBotRangeLimiter;
@@ -62,6 +63,7 @@ public static class Settings
         BindDebugOptions(config);
 #endif
         BindGeneral(config);
+        BindGraphics(config);
         
         // Disable the bot limiter if incompatible plugins are found.
         if (!Plugin.DisableBotManagement)
@@ -92,12 +94,12 @@ public static class Settings
 
     private static void BindGraphics(ConfigFile config)
     {
-        ConfigEntries.Add(UseExperimentalPatches = config.Bind(
+        ConfigEntries.Add(EnableShadowSettings = config.Bind(
             GraphicsSection,
-            "Enable Graphics Settings",
+            "Enable Experimental Graphic Settings",
             true,
             new ConfigDescription(
-                "Enable this section",
+                "Enables experimental graphic settings in the EFT graphics settings page.",
                 null,
                 new ConfigurationManagerAttributes { })));
     }
@@ -120,6 +122,15 @@ public static class Settings
             new ConfigDescription(
                 "Caps the amount of bots that can be asleep (Higher is better performance)",
                 new AcceptableValueRange<int>(1, 50),
+                new ConfigurationManagerAttributes { })));
+        
+        ConfigEntries.Add(EnableBotCulling = config.Bind(
+            BotLimitSection,
+            "Enable Culling of bots",
+            true,
+            new ConfigDescription(
+                "Enables culling of bots. It will only cull disabled bots",
+                null,
                 new ConfigurationManagerAttributes { })));
         
         ConfigEntries.Add(DisableScavs = config.Bind(

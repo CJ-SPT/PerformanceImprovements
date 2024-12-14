@@ -104,9 +104,6 @@
 		<Reference Include="Unity.Collections">
 			<HintPath>$(SolutionDir)UnityToolkit\Unity.Collections.dll</HintPath>
 		</Reference>
-		<Reference Include="DrakiaXYZ.BigBrain">
-			<HintPath>..\..\..\BepinEx\Plugins\DrakiaXYZ-BigBrain.dll</HintPath>
-		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>

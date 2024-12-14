@@ -14,10 +14,6 @@ public static class GraphicsUtils
     private static SharedGameSettingsClass _sharedGameSettings;
     private static FieldInfo SsaaImplField;
     
-    private static EDLSSMode _defaultDlssMode;
-    private static EFSR2Mode _defaultFsr2Mode;
-    private static EFSR3Mode _defaultRsr3Mode;
-    
     static GraphicsUtils()
     {
         _sharedGameSettings = Singleton<SharedGameSettingsClass>.Instance;

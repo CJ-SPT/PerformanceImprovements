@@ -16,9 +16,6 @@ namespace PerformanceImprovements.Bots.Patches;
 public class BotOwnerMethod9 : ModulePatch
 {
     private static GameWorld _gameWorld;
-    
-    private static CancellationToken _cancellationToken;
-    
     protected override MethodBase GetTargetMethod()
     {
         return AccessTools.Method(typeof(BotOwner), nameof(BotOwner.method_9));
