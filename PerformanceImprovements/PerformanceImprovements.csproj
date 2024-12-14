@@ -180,10 +180,10 @@
 		<RemoveDir Directories="$(ProjectDir)release" />
 		<Copy
 				SourceFiles="@(OutputDLL);@(Resources);"
-				DestinationFolder="$(ProjectDir)release\PerformanceImprovemenmts\BepInEx\plugins\%(RecursiveDir)"
+				DestinationFolder="$(ProjectDir)release\PerformanceImprovements\BepInEx\plugins\%(RecursiveDir)"
 		/>
 		<ZipDirectory
-				SourceDirectory="$(ProjectDir)release\PerformanceImprovemenmts\"
+				SourceDirectory="$(ProjectDir)release\PerformanceImprovements\"
 				DestinationFile="$(ProjectDir)release\PerformanceImprovements-$(ConfigurationName)-$(Version)-$(SourceRevisionId).zip"
 		/>
 	</Target>
