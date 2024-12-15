@@ -41,6 +41,10 @@ public static class PatchManager
             .Where(t => t.BaseType == typeof(ModulePatch) && 
                         t.GetCustomAttribute(typeof(DisablePatchAttribute)) == null);
         
+        patches = Plugin.IsFikaPresent 
+            ? patches.Where(t => t.GetCustomAttribute(typeof(FikaDisablePatchAttribute)) == null)
+            : patches;
+        
         return Settings.UseExperimentalPatches.Value
             ? patches
             : patches.Where(t => t.GetCustomAttribute(typeof(ExperimentalPatchAttribute)) == null);
