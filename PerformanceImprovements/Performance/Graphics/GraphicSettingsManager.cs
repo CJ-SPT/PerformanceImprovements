@@ -5,7 +5,7 @@ using PerformanceImprovements.Models;
 using UnityEngine;
 using Logger = PerformanceImprovements.Utils.Logger;
 
-namespace PerformanceImprovements.Graphics;
+namespace PerformanceImprovements.Performance.Graphics;
 
 public static class GraphicSettingsManager
 {

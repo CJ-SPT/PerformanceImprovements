@@ -4,7 +4,7 @@ using HarmonyLib;
 using PerformanceImprovements.Utils;
 using SPT.Reflection.Patching;
 
-namespace PerformanceImprovements.Bots.Patches;
+namespace PerformanceImprovements.Performance.Bots.Patches;
 
 [FikaDisablePatch]
 public class BotCullingHookPatch : ModulePatch

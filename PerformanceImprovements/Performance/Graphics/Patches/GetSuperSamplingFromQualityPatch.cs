@@ -4,7 +4,7 @@ using HarmonyLib;
 using SPT.Reflection.Patching;
 using UnityEngine;
 
-namespace PerformanceImprovements.Graphics.Patches;
+namespace PerformanceImprovements.Performance.Graphics.Patches;
 
 public class GetSuperSamplingFromQualityPatch : ModulePatch
 {

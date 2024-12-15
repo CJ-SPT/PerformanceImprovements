@@ -4,7 +4,7 @@ using HarmonyLib;
 using PerformanceImprovements.Utils;
 using SPT.Reflection.Patching;
 
-namespace PerformanceImprovements.Patches;
+namespace PerformanceImprovements.CorePatches;
 
 public class AddLocalizationsPatch : ModulePatch
 {

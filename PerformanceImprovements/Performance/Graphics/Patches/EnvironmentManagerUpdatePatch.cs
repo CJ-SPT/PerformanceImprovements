@@ -2,10 +2,11 @@
 using EFT.EnvironmentEffect;
 using HarmonyLib;
 using PerformanceImprovements.Models;
+using PerformanceImprovements.Performance.Graphics;
 using SPT.Reflection.Patching;
 using UnityEngine;
 
-namespace PerformanceImprovements.Graphics.Patches;
+namespace PerformanceImprovements.Performance.Graphics.Patches;
 
 public class EnvironmentManagerUpdatePatch : ModulePatch
 {

@@ -6,7 +6,7 @@ using HarmonyLib;
 using PerformanceImprovements.Utils;
 using SPT.Reflection.Patching;
 
-namespace PerformanceImprovements.Patches;
+namespace PerformanceImprovements.Performance.Bots.Patches;
 
 [ExperimentalPatch]
 public class StaticManagerUpdatePatch : ModulePatch

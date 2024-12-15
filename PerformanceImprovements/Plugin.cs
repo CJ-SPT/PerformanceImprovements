@@ -8,8 +8,7 @@ using CTap;
 using JetBrains.Annotations;
 using PerformanceImprovements.Config;
 using PerformanceImprovements.EFTProfiler;
-using PerformanceImprovements.Graphics;
-using PerformanceImprovements.Threading;
+using PerformanceImprovements.Performance.Graphics;
 using PerformanceImprovements.Utils;
 using UnityEngine;
 

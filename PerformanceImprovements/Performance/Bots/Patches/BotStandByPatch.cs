@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Comfort.Common;
 using EFT;
-using EFT.AssetsManager;
 using HarmonyLib;
 using PerformanceImprovements.Config;
 using PerformanceImprovements.Utils;
 using SPT.Reflection.Patching;
 using UnityEngine;
-using Logger = PerformanceImprovements.Utils.Logger;
 
-namespace PerformanceImprovements.Bots.Patches;
+namespace PerformanceImprovements.Performance.Bots.Patches;
 
+[FikaDisablePatch]
 internal class BotStandByUpdatePatch : ModulePatch
 {
     private static bool IsLimitEnabled => Settings.EnableBotRangeLimiter.Value;

@@ -135,6 +135,10 @@
 		
 	</ItemGroup>
 	
+	<ItemGroup>
+	  <Folder Include="Performance\" />
+	</ItemGroup>
+	
 	<!-- Gets the commit hash from git -->
 	<Target Name="SetSourceRevisionId" BeforeTargets="InitializeSourceControlInformation">
 		<Exec

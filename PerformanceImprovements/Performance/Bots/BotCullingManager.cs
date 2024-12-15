@@ -8,7 +8,7 @@ using PerformanceImprovements.Utils;
 using UnityEngine;
 using Logger = PerformanceImprovements.Utils.Logger;
 
-namespace PerformanceImprovements.Bots;
+namespace PerformanceImprovements.Performance.Bots;
 
 internal class BotCullingManager : MonoBehaviour
 {

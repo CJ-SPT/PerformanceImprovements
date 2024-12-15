@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using EFT.UI.Settings;
 
-namespace PerformanceImprovements.UI;
+namespace PerformanceImprovements.Performance.Graphics;
 
 public class PerformanceSettingsTab : SettingsTab
 {

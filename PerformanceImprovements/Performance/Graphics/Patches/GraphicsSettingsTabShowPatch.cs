@@ -3,8 +3,8 @@ using Bsg.GameSettings;
 using EFT.UI.Settings;
 using HarmonyLib;
 using PerformanceImprovements.Config;
-using PerformanceImprovements.Graphics;
 using PerformanceImprovements.Models;
+using PerformanceImprovements.Performance.Graphics;
 using SPT.Reflection.Patching;
 using UnityEngine;
 
