@@ -7,7 +7,7 @@ using SPT.Reflection.Patching;
 namespace PerformanceImprovements.Performance.Bots.Patches;
 
 [FikaDisablePatch]
-public class BotCullingHookPatch : ModulePatch
+public class BotControllerInitPatch : ModulePatch
 {
 	protected override MethodBase GetTargetMethod()
 	{
@@ -15,8 +15,8 @@ public class BotCullingHookPatch : ModulePatch
 	}
 
 	[PatchPostfix]
-	public static void PatchPrefix(BotsController __instance)
+	public static void PatchPostfix()
 	{
-		BotCullingManager.Instance = GameUtils.GetGameWorld().GetOrAddComponent<BotCullingManager>();
+		BotStandByUpdatePatch.DisabledBots = 0;
 	}
 }

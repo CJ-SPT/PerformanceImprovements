@@ -10,11 +10,16 @@ using UnityEngine;
 
 namespace PerformanceImprovements.Performance.Bots.Patches;
 
-[FikaDisablePatch]
+//[FikaDisablePatch]
 internal class BotStandByUpdatePatch : ModulePatch
 {
-    private static bool IsLimitEnabled => Settings.EnableBotRangeLimiter.Value;
-    public static List<BotOwner> SleepingOwners { get; } = [];
+    private static bool IsLimitEnabled => Settings.EnableBotLimiter.Value;
+    private static int AliveBots => GameUtils.GetGameWorld().AllAlivePlayersList.Count - 1;
+    
+    /// <summary>
+    /// Reset in BotControllerInitPatch
+    /// </summary>
+    public static int DisabledBots;
     
     private static readonly Dictionary<string, Func<int>> LocationLimitDistances = new()
     {
@@ -40,75 +45,85 @@ internal class BotStandByUpdatePatch : ModulePatch
     [PatchPrefix]
     public static bool PatchPrefix(BotStandBy __instance, BotOwner ___botOwner_0, BotStandByType ___standByType, ref float ____nextCheckTime)
     {
-        // Disabled - Fika/QB
-        if (Plugin.DisableBotManagement) return false;
-        
-        // Not time to check this bot yet
-        if (IsLimitEnabled && ____nextCheckTime > Time.time) return false;
-        
-        // Bot Limiter is disabled and the bot is disabled
-        if (!IsLimitEnabled && __instance.StandByType == BotStandByType.paused)
+        switch (IsLimitEnabled)
         {
-            ____nextCheckTime = Time.time + 10f;
-            __instance.StandByType = BotStandByType.active;
-            return false;
+            case true:
+                if (____nextCheckTime > Time.time)
+                {
+                    return false;
+                }
+                break;
+            
+            case false:
+                // Limiter is disabled, run the base limiter code
+                return true;
         }
         
-        // Bot has first-aid to do or is in combat, let them do it, add 30 seconds
-        if (___botOwner_0.Medecine.FirstAid.Have2Do || ___botOwner_0.Memory.HaveEnemy)
+        if (TryEnableBot(___botOwner_0))
         {
-            Logger.LogDebug($"{___botOwner_0.ProfileId} needs medical or is in combat");
-            
-            if (__instance.StandByType != BotStandByType.active)
-            {
-                EnableBot(___botOwner_0, __instance);
-            }
-            
-            ____nextCheckTime = Time.time + 30f;
+            ____nextCheckTime = Time.time + 10f;
             return false;
         }
 
-        // We are over the cap allowed to disable bots
-        if (SleepingOwners.Count > Settings.MaxSleepingBots.Value)
-        {
-            if (__instance.StandByType != BotStandByType.active)
-            {
-                Utils.Logger.Debug($"{___botOwner_0.ProfileId} Enable Reason: Over SleepingOwners Count");
-                EnableBot(___botOwner_0, __instance);
-            }
-            
-            ____nextCheckTime = Time.time + 10f;
-            return false;
-        }
+        TryDisableBot(___botOwner_0);
         
-        // Bot cannot be disabled, it is too close
-        if (!CanBeDisabledByDistance(___botOwner_0))
-        {
-            if (__instance.StandByType != BotStandByType.active)
-            {
-                Utils.Logger.Debug($"{___botOwner_0.ProfileId} Enable Reason: To Close to player");
-                EnableBot(___botOwner_0, __instance);
-            }
-            
-            ____nextCheckTime = Time.time + 10f;
-            return false;
-        }
+        ____nextCheckTime = Time.time + 10f;
+        return false;
+    }
+
+    /// <summary>
+    /// Checks all the conditions required to enable a bot
+    /// </summary>
+    /// <param name="owner"></param>
+    /// <returns>True if enabled a bot</returns>
+    private static bool TryEnableBot(BotOwner owner)
+    {
+        // Bot is active, no need to check anything else.
+        if (owner.StandBy.StandByType == BotStandByType.active) return false;
         
-        // Bot can be put to sleep
-        if (CanBeDisabledByCount() && CanBotSideBeDisabled(___botOwner_0.GetPlayer) && CanBeDisabledByDistance(___botOwner_0))
+        // Bot cannot be disabled
+        if (!CanBeDisabledByCount() || !CanBeDisabledByDistance(owner))
         {
-            if (___standByType != BotStandByType.paused)
-            {
-                Utils.Logger.Debug($"{___botOwner_0.ProfileId} Disable Reason: General StandBy");
-                DisableBot(___botOwner_0, __instance);
-            }
+            Utils.Logger.Debug($"bot {owner.ProfileId} has been activated");
             
-            ____nextCheckTime = Time.time + 10f;
+            owner.StandBy.StandByType = BotStandByType.active;
+            DisabledBots--;
+            return true;
         }
         
         return false;
     }
+
+    private static void TryDisableBot(BotOwner owner)
+    {
+        // Bot is already in Standby, or is actively in combat
+        if (owner.StandBy.StandByType == BotStandByType.paused || BotIsInCombat(owner)) return;
+        
+        // Bot can be put to sleep
+        if (CanBeDisabledByCount() && CanBotSideBeDisabled(owner.GetPlayer) && CanBeDisabledByDistance(owner))
+        {
+            Utils.Logger.Debug($"bot {owner.ProfileId} has been paused");
+            
+            owner.StandBy.StandByType = BotStandByType.paused;
+            DisabledBots++;
+        }
+    }
     
+    /// <summary>
+    /// Check if the bot is actively in combat or needs to heal
+    /// </summary>
+    /// <param name="owner">Owner to check</param>
+    /// <returns>True if bot is in combat or needs medical attention</returns>
+    private static bool BotIsInCombat(BotOwner owner)
+    {
+        return owner.Medecine.FirstAid.Have2Do || owner.Memory.HaveEnemy;
+    }
+    
+    /// <summary>
+    /// Check if a bot can be disabled by type of bot
+    /// </summary>
+    /// <param name="bot">owner to check</param>
+    /// <returns>True if bot can be disabled</returns>
     private static bool CanBotSideBeDisabled(Player bot)
     {
         if (bot.Side == EPlayerSide.Savage)
@@ -143,11 +158,20 @@ internal class BotStandByUpdatePatch : ModulePatch
         return false;
     }
     
+    /// <summary>
+    /// Check the sleeping bot count vs the config entry
+    /// </summary>
+    /// <returns>True if bot can be disabled</returns>
     private static bool CanBeDisabledByCount()
     {
-        return SleepingOwners.Count < Settings.MaxSleepingBots.Value;
+        return Settings.MaxActiveBots.Value > DisabledBots;
     }
     
+    /// <summary>
+    /// Check of the bot can be disabled by distance
+    /// </summary>
+    /// <param name="owner">Owner to check</param>
+    /// <returns>True if bot can be disabled</returns>
     private static bool CanBeDisabledByDistance(BotOwner owner)
     {
         var mainPlayer = GameUtils.GetMainPlayer();
@@ -159,7 +183,7 @@ internal class BotStandByUpdatePatch : ModulePatch
             ((IPlayer)owner.GetPlayer).Position, 
             ((IPlayer)mainPlayer).Position);
         
-        // Bot is closer than the enable difference and is disabled
+        // Bot is closer than the enable difference
         if (trueDistance < enableDistance)
         {
             return false;
@@ -168,22 +192,9 @@ internal class BotStandByUpdatePatch : ModulePatch
         // Bot is outside the disable radius and is enabled
         return trueDistance > disableDistance;
     }
-
-    private static void DisableBot(BotOwner owner, BotStandBy standBy)
-    {
-        standBy.StandByType = BotStandByType.paused;
-        BotCullingManager.Instance.TryCullOrShowBot(owner);
-        SleepingOwners.Add(owner);
-    }
-
-    public static void EnableBot(BotOwner owner, BotStandBy standBy)
-    {
-        standBy.StandByType = BotStandByType.active;
-        BotCullingManager.Instance.TryCullOrShowBot(owner);
-        SleepingOwners.Remove(owner);
-    }
 }
 
+[FikaDisablePatch]
 internal class BotStandByActivatePatch : ModulePatch
 {
     protected override MethodBase GetTargetMethod()
@@ -194,10 +205,6 @@ internal class BotStandByActivatePatch : ModulePatch
     [PatchPostfix]
     public static void PatchPostfix(BotStandBy __instance, BotOwner ___botOwner_0)
     {
-        if (__instance.StandByType == BotStandByType.active)
-        {
-            BotStandByUpdatePatch.EnableBot(___botOwner_0, __instance);
-            BotStandByUpdatePatch.SleepingOwners.Remove(___botOwner_0);
-        }
+        BotStandByUpdatePatch.DisabledBots--;
     }
 }

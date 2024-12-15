@@ -23,9 +23,8 @@ public static class Settings
     public static ConfigEntry<bool> EnableShadowSettings;
     
     private const string BotLimitSection = "Bot Limiter";
-    public static ConfigEntry<bool> EnableBotRangeLimiter;
-    public static ConfigEntry<bool> EnableBotCulling;
-    public static ConfigEntry<int> MaxSleepingBots;
+    public static ConfigEntry<bool> EnableBotLimiter;
+    public static ConfigEntry<int> MaxActiveBots;
     public static ConfigEntry<bool> DisableScavs;
     public static ConfigEntry<bool> DisableSniperScavs;
     public static ConfigEntry<bool> DisablePmcs;
@@ -107,7 +106,7 @@ public static class Settings
     
     private static void BindBotLimiter(ConfigFile config)
     {
-        ConfigEntries.Add(EnableBotRangeLimiter = config.Bind(
+        ConfigEntries.Add(EnableBotLimiter = config.Bind(
             BotLimitSection,
             "Enable Bot Distance Limiter",
             true,
@@ -116,22 +115,13 @@ public static class Settings
                 null,
                 new ConfigurationManagerAttributes { })));
         
-        ConfigEntries.Add(MaxSleepingBots = config.Bind(
+        ConfigEntries.Add(MaxActiveBots = config.Bind(
             BotLimitSection,
-            "Max Sleeping Bots Count",
+            "Max Active Bot Count",
             16,
             new ConfigDescription(
-                "Caps the amount of bots that can be asleep (Higher is better performance)",
+                "The amount of bots that can be active at any given time",
                 new AcceptableValueRange<int>(1, 50),
-                new ConfigurationManagerAttributes { })));
-        
-        ConfigEntries.Add(EnableBotCulling = config.Bind(
-            BotLimitSection,
-            "Enable Culling of bots",
-            true,
-            new ConfigDescription(
-                "Enables culling of bots. It will only cull disabled bots (EXPERIMENTAL)",
-                null,
                 new ConfigurationManagerAttributes { })));
         
         ConfigEntries.Add(DisableScavs = config.Bind(

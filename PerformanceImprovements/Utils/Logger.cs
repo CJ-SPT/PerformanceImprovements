@@ -3,7 +3,7 @@ using BepInEx.Logging;
 
 namespace PerformanceImprovements.Utils;
 
-public class Logger
+internal static class Logger
 {
     private static ManualLogSource _logger => Plugin.Log;
 
