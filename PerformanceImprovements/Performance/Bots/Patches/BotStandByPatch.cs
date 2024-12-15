@@ -14,7 +14,6 @@ namespace PerformanceImprovements.Performance.Bots.Patches;
 internal class BotStandByUpdatePatch : ModulePatch
 {
     private static bool IsLimitEnabled => Settings.EnableBotLimiter.Value;
-    private static int AliveBots => GameUtils.GetGameWorld().AllAlivePlayersList.Count - 1;
     
     /// <summary>
     /// Reset in BotControllerInitPatch
