@@ -83,7 +83,7 @@ internal class BotStandByUpdatePatch : ModulePatch
         // Bot cannot be disabled
         if (!CanBeDisabledByCount() || !CanBeDisabledByDistance(owner))
         {
-            Utils.Logger.Debug($"bot {owner.ProfileId} has been activated");
+            // Utils.Logger.Debug($"bot {owner.ProfileId} has been activated");
             
             owner.StandBy.StandByType = BotStandByType.active;
             DisabledBots--;
@@ -101,7 +101,7 @@ internal class BotStandByUpdatePatch : ModulePatch
         // Bot can be put to sleep
         if (CanBeDisabledByCount() && CanBotSideBeDisabled(owner.GetPlayer) && CanBeDisabledByDistance(owner))
         {
-            Utils.Logger.Debug($"bot {owner.ProfileId} has been paused");
+            // Utils.Logger.Debug($"bot {owner.ProfileId} has been paused");
             
             owner.StandBy.StandByType = BotStandByType.paused;
             DisabledBots++;
