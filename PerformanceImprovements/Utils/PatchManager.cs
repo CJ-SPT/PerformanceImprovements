@@ -51,14 +51,23 @@ public static class PatchManager
     }
 }
 
+/// <summary>
+/// Used to indicate a patch is not ready for prod and should be ignored during patching
+/// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class DisablePatchAttribute : Attribute
 { }
 
+/// <summary>
+/// Used to indicate a patch which is experimental and should be allowed to be disabled
+/// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class ExperimentalPatchAttribute : Attribute
 { }
 
+/// <summary>
+/// Indicates a patch which is not compatible with Fika and should be ignored if present
+/// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class FikaDisablePatchAttribute : Attribute
 { }
