@@ -13,10 +13,7 @@ public static class GraphicSettingsManager
     
     static GraphicSettingsManager()
     {
-        var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        var dir = Directory.GetParent(path).FullName;
-        
-        _settingsPath = Path.Combine(dir, "config", "com.dirtbikercj.performanceimprovements.graphicsettings.json");
+        _settingsPath = Path.Combine(BepInEx.Paths.ConfigPath, "com.dirtbikercj.performanceimprovements.graphicsettings.json");
     }
     
     public static SettingsModel SettingsModel { get; private set; }
