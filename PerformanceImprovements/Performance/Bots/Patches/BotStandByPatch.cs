@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace PerformanceImprovements.Performance.Bots.Patches;
 
-//[FikaDisablePatch]
+[FikaDisablePatch]
 internal class BotStandByUpdatePatch : ModulePatch
 {
     private static bool IsLimitEnabled => Settings.EnableBotLimiter.Value;
