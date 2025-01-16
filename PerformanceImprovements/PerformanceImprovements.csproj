@@ -139,6 +139,10 @@
 	  <Folder Include="Performance\" />
 	</ItemGroup>
 	
+	<ItemGroup>
+	  <ProjectReference Include="..\PerformanceImprovements_Prepatcher\PerformanceImprovements_Prepatch.csproj" />
+	</ItemGroup>
+	
 	<!-- Gets the commit hash from git -->
 	<Target Name="SetSourceRevisionId" BeforeTargets="InitializeSourceControlInformation">
 		<Exec
@@ -172,6 +176,7 @@
 		<ItemGroup>
 			<OutputDLL Include="$(ProjectDir)$(OutDir)$(TargetName).dll" />
 			<Resources Include="$(ProjectDir)Resources\**\*.*" />
+			<PrePatch Include ="$(ProjectDir)$(OutDir)Performance_PrePatch.dll" />
 		</ItemGroup>
 
 		<!-- Copies the output and resources to tarkov game folder -->
@@ -185,6 +190,10 @@
 		<Copy
 				SourceFiles="@(OutputDLL);@(Resources);"
 				DestinationFolder="$(ProjectDir)release\PerformanceImprovements\BepInEx\plugins\%(RecursiveDir)"
+		/>
+		<Copy
+				SourceFiles="@(PrePatch);"
+				DestinationFolder="$(ProjectDir)release\PerformanceImprovements\BepInEx\patchers\%(RecursiveDir)"
 		/>
 		<ZipDirectory
 				SourceDirectory="$(ProjectDir)release\PerformanceImprovements\"
