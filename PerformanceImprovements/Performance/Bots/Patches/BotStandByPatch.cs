@@ -10,6 +10,7 @@ using UnityEngine;
 
 namespace PerformanceImprovements.Performance.Bots.Patches;
 
+[QBDisablePatch]
 [FikaDisablePatch]
 internal class BotStandByUpdatePatch : ModulePatch
 {
@@ -193,6 +194,7 @@ internal class BotStandByUpdatePatch : ModulePatch
     }
 }
 
+[QBDisablePatch]
 [FikaDisablePatch]
 internal class BotStandByActivatePatch : ModulePatch
 {

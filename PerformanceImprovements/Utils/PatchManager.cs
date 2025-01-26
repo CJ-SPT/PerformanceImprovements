@@ -45,6 +45,10 @@ public static class PatchManager
             ? patches.Where(t => t.GetCustomAttribute(typeof(FikaDisablePatchAttribute)) == null)
             : patches;
         
+        patches = Plugin.IsQuestingBotsPresent 
+            ? patches.Where(t => t.GetCustomAttribute(typeof(QBDisablePatchAttribute)) == null)
+            : patches;
+        
         return Settings.UseExperimentalPatches.Value
             ? patches
             : patches.Where(t => t.GetCustomAttribute(typeof(ExperimentalPatchAttribute)) == null);
@@ -70,4 +74,11 @@ public class ExperimentalPatchAttribute : Attribute
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class FikaDisablePatchAttribute : Attribute
+{ }
+
+/// <summary>
+/// Indicates a patch which is not compatible with questing bots and should be ignored if present
+/// </summary>
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+public class QBDisablePatchAttribute : Attribute
 { }

@@ -6,6 +6,7 @@ using SPT.Reflection.Patching;
 
 namespace PerformanceImprovements.Performance.Bots.Patches;
 
+[QBDisablePatch]
 [FikaDisablePatch]
 public class BotControllerInitPatch : ModulePatch
 {
