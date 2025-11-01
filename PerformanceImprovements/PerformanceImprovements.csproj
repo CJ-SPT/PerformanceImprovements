@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
 	  <Description>EFT performance improvements</Description>
 	  <Version>0.2.1</Version>
-	  <Nullable>disable</Nullable>
+	  <Nullable>enable</Nullable>
 	  <LangVersion>latest</LangVersion>
 	  <PackageId>PerformanceImprovements</PackageId>
 	  <RootNamespace>PerformanceImprovements</RootNamespace>
@@ -12,9 +12,7 @@
 	
 	<ItemGroup>
 	  <None Remove="json\CleanUpNames.json" />
-	  <EmbeddedResource Include="json\CleanUpNames.json" />
 	  <None Remove="json\Localization.json" />
-	  <EmbeddedResource Include="json\Localization.json" />
 	</ItemGroup>
 
 	<PropertyGroup>

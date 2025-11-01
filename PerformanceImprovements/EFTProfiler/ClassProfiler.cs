@@ -16,9 +16,9 @@ public class ClassProfiler()
 {
     private readonly Harmony _harmony = new("Profiler");
     private static readonly Dictionary<MethodBase, AnalyticsModel> AnalyticsModels = []; 
-    private static readonly string AssemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+    private static readonly string AssemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
 
-    [CanBeNull] private Type _currentTypeProfiling;
+    private Type? _currentTypeProfiling;
     private static bool _isEnabled;
     
     public void TryEnableOrDisable(bool enabled)
@@ -81,7 +81,7 @@ public class ClassProfiler()
         
         File.WriteAllText(Path.Combine(AssemblyPath, $"{_currentTypeProfiling!.Name}_timings.json"), json);
         
-        Logger.Warn("Analytics dumped to disk...");
+        Plugin.Log?.LogWarning("Analytics dumped to disk...");
     }
 
     private void PatchAll()
@@ -93,7 +93,7 @@ public class ClassProfiler()
                 if (!method.IsDeclaredMember() ||
                     method.IsGenericMethod) continue;
                 
-                Logger.Debug($"Patching method {method.Name}");
+                Plugin.Log?.LogInfo($"Patching method {method.Name}");
                 
                 var harmonyPrefix =
                     new HarmonyMethod(AccessTools.Method(typeof(ProfilerPatch), nameof(ProfilerPatch.Prefix)));
@@ -105,7 +105,7 @@ public class ClassProfiler()
         }
         catch (Exception e)
         {
-            Logger.Fatal(e.Message);
+            Plugin.Log?.LogFatal(e.Message);
             throw;
         }
     }
@@ -154,10 +154,10 @@ public class ClassProfiler()
             switch (milliseconds)
             {
                 case > 5 and < 10:
-                    Logger.Warn($"{methodString} took {milliseconds} ms");
+                    Plugin.Log?.LogWarning($"{methodString} took {milliseconds} ms");
                     break;
                 case > 10:
-                    Logger.Error($"{methodString} took {milliseconds} ms");
+                    Plugin.Log?.LogError($"{methodString} took {milliseconds} ms");
                     break;
             }
         }

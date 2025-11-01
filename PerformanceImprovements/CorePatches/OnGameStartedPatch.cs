@@ -6,7 +6,7 @@ using SPT.Reflection.Patching;
 
 namespace PerformanceImprovements.CorePatches;
 
-[DisablePatch]
+[IgnoreAutoPatch]
 public class OnGameStartedPatch : ModulePatch
 {
 	protected override MethodBase GetTargetMethod()
@@ -17,6 +17,5 @@ public class OnGameStartedPatch : ModulePatch
 	[PatchPostfix]
 	public static void PatchPostfix(GameWorld __instance)
 	{
-		
 	}
 }

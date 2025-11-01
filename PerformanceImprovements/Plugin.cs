@@ -5,33 +5,26 @@ using System.Linq;
 using BepInEx.Bootstrap;
 using BepInEx.Logging;
 using CTap;
-using JetBrains.Annotations;
 using PerformanceImprovements.Config;
 using PerformanceImprovements.EFTProfiler;
-using PerformanceImprovements.Performance.Graphics;
 using PerformanceImprovements.Utils;
-using UnityEngine;
+using SPT.Reflection.Patching;
 
 namespace PerformanceImprovements;
 
 [BepInPlugin("com.dirtbikercj.performanceImprovements", "Performance Improvements", BuildInfo.Version)]
-[BepInDependency("com.Arys.UnityToolkit")]
 [BepInDependency("com.fika.core", BepInDependency.DependencyFlags.SoftDependency)]
-[BepInDependency("me.sol.sain", BepInDependency.DependencyFlags.SoftDependency)]
-[BepInDependency("com.DanW.QuestingBots", BepInDependency.DependencyFlags.SoftDependency)]
 public class Plugin : BaseUnityPlugin
 {
-    public const int TarkovVersion = 33420;
-    
+    public const int TarkovVersion = 40087;
     public static bool IsFikaPresent { get; private set; }
-    public static bool IsSainPresent { get; private set; }
-    public static bool IsQuestingBotsPresent { get; private set; }
-    internal static bool DisableBotManagement => IsFikaPresent || IsQuestingBotsPresent;
-    
-    [CanBeNull] internal static ClassProfiler Profiler;
 
-    internal static GameObject HookObject;
-    internal static ManualLogSource Log;
+#if DEBUG
+    internal static ClassProfiler? Profiler;
+#endif
+    
+    internal static ManualLogSource? Log;
+    private PatchManager? _patchManager;
     
     private void Awake()
     {
@@ -42,25 +35,18 @@ public class Plugin : BaseUnityPlugin
 
         Log = Logger;
         
-        GraphicSettingsManager.LoadSettings();
-        
         IsFikaPresent = Chainloader.PluginInfos.Keys.Contains("com.fika.core");
-        IsSainPresent = Chainloader.PluginInfos.Keys.Contains("me.sol.sain");
-        IsQuestingBotsPresent = Chainloader.PluginInfos.Keys.Contains("com.DanW.QuestingBots");
 
-        if (IsFikaPresent || IsQuestingBotsPresent)
+        if (IsFikaPresent)
         {
-            Utils.Logger.Warn("Mods with incompatible features detected, disabling features.");
+            Log.LogWarning("Mods with incompatible features detected, disabling features.");
         }
-        
-        HookObject = new GameObject();
-        DontDestroyOnLoad(HookObject);
-        HookObject.AddComponent<UnityMainThreadDispatcher>();
-        // HookObject.AddComponent<SceneCleaner>();
         
         Settings.Bind(Config);
         R.GetReflectionInfo();
-        PatchManager.EnablePatches();
+
+        _patchManager = new PatchManager(this, true);
+        _patchManager.EnablePatches();
 
 #if DEBUG
         Profiler = new ClassProfiler();
@@ -73,7 +59,7 @@ public class Plugin : BaseUnityPlugin
 #if DEBUG
     private void Update()
     {
-        if (Profiler is not null && Settings.DumpAnalytics.Value.IsDown())
+        if (Profiler is not null && Settings.DumpAnalytics!.Value.IsDown())
         {
             Profiler.DumpAnalytics();
         }
