@@ -4,7 +4,6 @@ using System;
 using System.Linq;
 using BepInEx.Bootstrap;
 using BepInEx.Logging;
-using CTap;
 using PerformanceImprovements.Config;
 using PerformanceImprovements.EFTProfiler;
 using PerformanceImprovements.Utils;
